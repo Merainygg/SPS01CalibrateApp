@@ -14,23 +14,25 @@ namespace SPS01CalibrateApp
     public class SPScom
     {
 
-        private string curmode = null;
-        private string connResult = null;
-        private string connPdResult = null;
+        private string _curMode;
+        private string _connResult;
+        private string _connPdResult;
         public string PortName { get; set; }
-        public SerialPort serialPort;
+        public readonly SerialPort SerialPort;
 
-        public Dictionary<string,string> ComMode { get; set; }
-        public Dictionary<string, string> ComMemMode { get; set; }
+        private Dictionary<string,string> ComMode { get; set; }
+        private Dictionary<string, string> ComMemMode { get; set; }
         public Dictionary<string, string> RawAddr { get; set; }
+        private Dictionary<string, string> ConnMode { get; set; }
 
         public string DeviceAddr { get; set; }
-        public string Receive { get; set; }
-
+        public string Receive { get; private set; }
+        public string ConnModeName { get; set; }
+        private string Id { get; set; }
         
         public SPScom()
         {
-            serialPort = new SerialPort();
+            SerialPort = new SerialPort();
             /*
              *  STRT_CM     013C5B
                 STRT_NM     020000
@@ -70,26 +72,27 @@ namespace SPS01CalibrateApp
 
             RawAddr = new Dictionary<string, string> { { "P1", "00" }, { "P2", "02" }, { "P3", "04" }, { "TSI", "06" }, { "TSE", "08" }, { "VDDA", "0A" }, { "P1O", "0E" }, { "P2O", "10" }, { "TSIO", "12" }, { "TSEO", "14" }, { "P1DAC", "1E" }, { "P1SENT", "16" }, { "P2SENT", "18" }, { "P1VOFF", "20" } ,{ "P1FG","23"},{ "P2VOFF","26"},{ "P2FG","29"} };
 
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler); 
+            ConnMode = new Dictionary<string, string> { { "OWI", "O" }, { "IIC", "I" } };
+            SerialPort.DataReceived += DataReceivedHandler; 
         }
 
-        public void open()
+        public void Open()
         {
             try
             {
 
-                if (serialPort.IsOpen)
+                if (SerialPort.IsOpen)
                 {
-                    serialPort.Close();
+                    SerialPort.Close();
                 }
-                serialPort.PortName = PortName;
-                serialPort.BaudRate = 57600;
-                serialPort.DataBits = 8;
-                serialPort.Parity = Parity.None;
-                serialPort.StopBits = StopBits.One;
-                serialPort.ReadTimeout = 1000;
-                serialPort.WriteTimeout = 1000;
-                serialPort.Open();
+                SerialPort.PortName = PortName;
+                SerialPort.BaudRate = 57600;
+                SerialPort.DataBits = 8;
+                SerialPort.Parity = Parity.None;
+                SerialPort.StopBits = StopBits.One;
+                SerialPort.ReadTimeout = 1000;
+                SerialPort.WriteTimeout = 1000;
+                SerialPort.Open();
             }
             catch
             {
@@ -99,32 +102,32 @@ namespace SPS01CalibrateApp
 
         }
 
-        public void close()
+        public void Close()
         {
-            if (serialPort.IsOpen)
+            if (SerialPort.IsOpen)
             {
-                serialPort.Close();
+                SerialPort.Close();
             }
         }
 
         public bool ConnTs()
         {
-            if (!serialPort.IsOpen)
+            if (!SerialPort.IsOpen)
             {
                 //open();
                 return false;
             }
-            curmode = "ConnTs";
+            _curMode = "ConnTs";
             System.Diagnostics.Debug.WriteLine("ConnTs");
-            connResult = null;
-            string cmd = "@UART\r";
-            serialPort.WriteLine(cmd);
-            int count = 0;
+            _connResult = null;
+            var cmd = "@UART\r";
+            SerialPort.WriteLine(cmd);
+            var count = 0;
 
             while (true)
             {
                 System.Threading.Thread.Sleep(5);
-                if (connResult != null)
+                if (_connResult != null)
                 {
                     //break;
                     return true;
@@ -140,16 +143,16 @@ namespace SPS01CalibrateApp
 
         public bool ConnPd()
         {
-            connPdResult = null;
-            curmode = "ConnPd";
-            string cmd = "@PON\r";
-            serialPort.WriteLine(cmd);
+            _connPdResult = null;
+            _curMode = "ConnPd";
+            const string cmd = "@PON\r";
+            SerialPort.WriteLine(cmd);
             SetComMode("STRT_CM","01",false);
-            int count = 0;
+            var count = 0;
             while (true)
             {
                 System.Threading.Thread.Sleep(5);
-                if (connPdResult != null)
+                if (_connPdResult != null)
                 {
                     //break;
                     return true;
@@ -165,14 +168,14 @@ namespace SPS01CalibrateApp
 
         public void Pd2Nm()
         {   
-            curmode = "ConnPd";
+            _curMode = "ConnPd";
             //string cmd = "@PON\r";
             SetComMode("STRT_NM", "01", false);
-            int count = 0;
+            var count = 0;
             while (true)
             {
                 System.Threading.Thread.Sleep(5);
-                if (connPdResult != null)
+                if (_connPdResult != null)
                 {
                     //break;
                     return;
@@ -187,27 +190,23 @@ namespace SPS01CalibrateApp
 
         public void SetComMode(string mode,string length, bool ismode=false)
         {
-            if (ComMode.Keys.Contains(mode))
+            if (!ComMode.Keys.Contains(mode)) return;
+            if (ismode)
             {
-                if (ismode)
-                {
-                    curmode = mode;
-                }
-
-                string cmd = "@IW"+ length + DeviceAddr + ComMode[mode]+"\r";
-                System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
-                serialPort.WriteLine(cmd);
+                _curMode = mode;
             }
+
+            var cmd = "@" + ConnMode[ConnModeName] +"W"+ length + DeviceAddr + ComMode[mode]+"\r";
+            System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
+            SerialPort.WriteLine(cmd);
         }
 
         public void SetMemMode(string mode, string value)
         {
-            if (ComMemMode.Keys.Contains(mode))
-            {
-                curmode = mode;
-                string cmd = "@IW" + DeviceAddr + ComMemMode[mode] + value;
-                serialPort.WriteLine(cmd);
-            }
+            if (!ComMemMode.Keys.Contains(mode)) return;
+            _curMode = mode;
+            var cmd = "@" + ConnMode[ConnModeName] +"W" + DeviceAddr + ComMemMode[mode] + value;
+            SerialPort.WriteLine(cmd);
         }
 
         public string GetAllReg()
@@ -216,22 +215,29 @@ namespace SPS01CalibrateApp
             SetComMode("STRT_CM", "01", true);
             System.Threading.Thread.Sleep(50);
 
-            string reg = "";
-            for (int i = 0; i < 4; i++) { 
-                curmode = "ReadAllReg";
-                string cmd = "@IR40" + DeviceAddr + ComMemMode["RD_NVMREG_BURST"] + (i*64).ToString("X2") +"\r";
-                serialPort.WriteLine(cmd);
-                int count = 0;
-                while (curmode != null)
+            var reg = "";
+            for (var i = 0; i < 4; i++) { 
+                _curMode = "ReadAllReg";
+                var cmd = "@" + ConnMode[ConnModeName] +"R40" + DeviceAddr + ComMemMode["RD_NVMREG_BURST"] + (i*64).ToString("X2") +"\r";
+                SerialPort.WriteLine(cmd);
+                var count = 0;
+                while (_curMode != null)
                 {
                     count++;
                     if (count > 20)
                     {
                         break;
                     }
+                    //Console.WriteLine(reg);-
                     System.Threading.Thread.Sleep(5);
                 }
+                if (Receive.Length < 128)
+                {
+                    return "";
+                }
                 reg += Receive.Substring(0, 128);
+                //reg = Receive;
+                //Console.WriteLine(reg);
 
             }
 
@@ -239,19 +245,60 @@ namespace SPS01CalibrateApp
 
         }
 
+        public string GetId()
+        {
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+            _curMode = "ReadAllReg";
+            var cmd = "@" + ConnMode[ConnModeName] + "R04" + DeviceAddr + ComMemMode["RD_NVMREG_BURST"] + "F9" + "\r";
+            SerialPort.WriteLine(cmd);
+            var count = 0;
+            while (_curMode!= null)
+            {
+                count++;
+                if (count > 20)
+                {
+                    return "";
+                    // break;
+                }
+                System.Threading.Thread.Sleep(5);
+            }
+            Id = Receive.Substring(0, 8);
+            return Id;
+        }
+
+        public void SetId(string id)
+        {
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+            _curMode = "ReadAllReg";
+            RunScript("12F9"+id.Substring(0,2));
+            RunScript("12FA" + id.Substring(2, 2));
+            RunScript("12FB" + id.Substring(4, 2));
+            RunScript("12FC" + id.Substring(6, 2));
+            RunScript("B03C5B");
+            RunScript("810000");
+            RunScript("A10000");
+            RunScript("A00000");
+            System.Threading.Thread.Sleep(300);
+            RunScript("820000");
+        }
+
         public string GetAllNvm()
         {
             SetComMode("STRT_CM", "01", true);
             System.Threading.Thread.Sleep(50);
-
-            string nvm = "";
-            for (int i = 0; i < 4; i++)
+            RunScript("B03C5B");
+            RunScript("810000");
+            System.Threading.Thread.Sleep(50);
+            var nvm = "";
+            for (var i = 0; i < 4; i++)
             {
-                curmode = "ReadAllReg";
-                string cmd = "@IR40" + DeviceAddr + ComMemMode["RD_NVM_BURST"] + (i * 64).ToString("X2") + "\r";
-                serialPort.WriteLine(cmd);
-                int count = 0;
-                while (curmode != null)
+                _curMode = "ReadAllReg";
+                var cmd = "@" + ConnMode[ConnModeName] +"R40" + DeviceAddr + ComMemMode["RD_NVM_BURST"] + (i * 64).ToString("X2") + "\r";
+                SerialPort.WriteLine(cmd);
+                var count = 0;
+                while (_curMode != null)
                 {
                     count++;
                     if (count > 20)
@@ -263,30 +310,31 @@ namespace SPS01CalibrateApp
                 nvm += Receive.Substring(0, 128);
 
             }
+            RunScript("820000");
 
             return nvm;
 
         }
 
-        public int getRawdata(string rawMode,int jump,int avg)
+        public int GetRawdata(string rawMode,int jump,int avg)
         {
 
-            if (serialPort.IsOpen == false)
+            if (SerialPort.IsOpen == false)
             {
                 return 0;
             }
-            int sum = 0;
+            var sum = 0;
             // 命令格式：@IR读取的长度+设备地址+读取模式+寄存器地址
             //SetComMode("STRT_MEAS", "01", true);
-            for (int i = 0; i < (jump+avg); i++)
+            for (var i = 0; i < (jump+avg); i++)
             {
 
                 System.Threading.Thread.Sleep(50);
-                curmode = "ReadAllReg";
-                string cmd = "@IR02" + DeviceAddr + ComMemMode["RD_OUTMEM_BURST"] + RawAddr[rawMode] + "\r";
+                _curMode = "ReadAllReg";
+                var cmd = "@" + ConnMode[ConnModeName] +"R02" + DeviceAddr + ComMemMode["RD_OUTMEM_BURST"] + RawAddr[rawMode] + "\r";
                 //System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
-                serialPort.WriteLine(cmd);
-                while (curmode != null)
+                SerialPort.WriteLine(cmd);
+                while (_curMode != null)
                 {
                     System.Threading.Thread.Sleep(5);
                 }
@@ -299,25 +347,25 @@ namespace SPS01CalibrateApp
             //return 0;
         }
 
-        public int getMidData(string rawMode, int jump, int avg)
+        public int GetMidData(string rawMode, int jump, int avg)
         {
 
-            if (serialPort.IsOpen == false)
+            if (SerialPort.IsOpen == false)
             {
                 return 0;
             }
-            int sum = 0;
+            var sum = 0;
             // 命令格式：@IR读取的长度+设备地址+读取模式+寄存器地址
             //SetComMode("STRT_MEAS", "01", true);
-            for (int i = 0; i < (jump + avg); i++)
+            for (var i = 0; i < (jump + avg); i++)
             {
 
                 System.Threading.Thread.Sleep(50);
-                curmode = "ReadAllReg";
-                string cmd = "@IR03" + DeviceAddr + ComMemMode["RD_OUTMEM_BURST"] + RawAddr[rawMode] + "\r";
-                //System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
-                serialPort.WriteLine(cmd);
-                while (curmode != null)
+                _curMode = "ReadAllReg";
+                var cmd = "@" + ConnMode[ConnModeName] +"R03" + DeviceAddr + ComMemMode["RD_OUTMEM_BURST"] + RawAddr[rawMode] + "\r";
+                System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
+                SerialPort.WriteLine(cmd);
+                while (_curMode != null)
                 {
                     System.Threading.Thread.Sleep(5);
                 }
@@ -330,39 +378,47 @@ namespace SPS01CalibrateApp
         }
 
 
-
-        public void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             //SerialPort sp = (SerialPort)sender;
 
-            string receive = "";
-            if (curmode == "ReadAllReg")
+            var receive = "";
+            if (_curMode == "ReadAllReg")
             {
-                 
+                 while(SerialPort.BytesToRead > 0)
+                 {
+                     var bytes = new byte[SerialPort.BytesToRead];
+                     for (var i = 0; i < bytes.Length; i++)
+                     {
+                         bytes[i] = (byte)SerialPort.ReadByte();
+                         receive += bytes[i].ToString("X2");
+                     }
+                     System.Threading.Thread.Sleep(5);
+                 }
             }
             else
             {
-                while (serialPort.BytesToRead > 0)
+                while (SerialPort.BytesToRead > 0)
                 {
-                    receive += serialPort.ReadExisting();
+                    receive += SerialPort.ReadExisting();
                     System.Threading.Thread.Sleep(5);
                 }
             }
             
-            //System.Diagnostics.Debug.WriteLine("receive"+ receive);
+            //System.Diagnostics.Debug.WriteLine("receive"+ receive);/
             //System.Diagnostics.Debug.WriteLine("curmode"+ curmode);
             if (receive != "")
             {
                 //return;
                 Receive = receive;
             }
-            switch (curmode)
+            switch (_curMode)
             {
                 case "ConnTs":
                     if (receive.Contains("ACK"))
                     {
-                        curmode = null;
-                        connResult = "ACK";
+                        _curMode = null;
+                        _connResult = "ACK";
                     }
                     else
                     { }
@@ -371,14 +427,14 @@ namespace SPS01CalibrateApp
                     //System.Diagnostics.Debug.WriteLine("ConnPd");
                     if (receive.Contains("ACK"))
                     {
-                        curmode = null;
-                        connPdResult = "ACK";
+                        _curMode = null;
+                        _connPdResult = "ACK";
                     }
                     break;
                 case "ReadAllReg":
                     if (receive.Contains("41434B"))
                     {
-                        curmode = null;
+                        _curMode = null;
                         //System.Diagnostics.Debug.WriteLine("ReadAllReg");
                     }
                     break;
@@ -387,14 +443,14 @@ namespace SPS01CalibrateApp
             }
         }
 
-        internal void runScript(string v)
+        internal void RunScript(string v)
         {
             //throw new NotImplementedException();
             // 删除空白
             v = v.Trim();
 
-            string cmd = "@IW01" + DeviceAddr + v + "\r";
-            serialPort.WriteLine(cmd);
+            var cmd = "@" + ConnMode[ConnModeName] +"W01" + DeviceAddr + v + "\r";
+            SerialPort.WriteLine(cmd);
             System.Diagnostics.Debug.WriteLine("cmd:"+cmd);
             System.Threading.Thread.Sleep(10);
         }

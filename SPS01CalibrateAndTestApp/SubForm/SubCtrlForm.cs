@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 
@@ -13,9 +8,8 @@ namespace SPS01CalibrateApp
 {
     public partial class SubCtrlForm : Form
     {
-        SPScom spscom = new SPScom();
-        public string PortName { get; set; }
-        public SPScom Spscom { get => spscom; set => spscom = value; }
+        public string PortName { get; private set; }
+        public SPScom Spscom { get; set; } = new SPScom();
 
         private bool _flag = false;
 
@@ -39,7 +33,7 @@ namespace SPS01CalibrateApp
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             if (comboBox1.Text == "")
             {
@@ -50,15 +44,15 @@ namespace SPS01CalibrateApp
             {
                 if (button2.Text == "已连接")
                 {
-                    spscom.close();
+                    Spscom.Close();
                     button2.Text = "已断开";
                     button2.BackColor = Color.White;
                     return;
                 }
 
-                spscom.PortName = comboBox1.Text;
-                spscom.open();
-                if (spscom.ConnTs())
+                Spscom.PortName = comboBox1.Text;
+                Spscom.Open();
+                if (Spscom.ConnTs())
                 {
                     button2.Text = "已连接";
                     button2.BackColor = Color.Green;
@@ -79,7 +73,7 @@ namespace SPS01CalibrateApp
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = "串口信息:"+spscom.Receive;
+            toolStripStatusLabel1.Text = "串口信息:"+Spscom.Receive;
         }
 
         protected override void WndProc(ref Message m)
@@ -104,8 +98,8 @@ namespace SPS01CalibrateApp
                 {
                     // 串口减少
                     _flag = true;
-                    string the_cur = comboBox1.Text;
-                    if (!SerialPort.GetPortNames().Contains(the_cur))
+                    var theCur = comboBox1.Text;
+                    if (!SerialPort.GetPortNames().Contains(theCur))
                     {
                         if (button1.Text == "连接")
                         {
@@ -113,7 +107,7 @@ namespace SPS01CalibrateApp
                         }
                         else
                         {
-                            spscom.close();
+                            Spscom.Close();
                             MessageBox.Show("串口已拔出");
                             button1.Text = "连接";
                             _flag = false;

@@ -16,7 +16,7 @@ namespace SPS01CalibrateApp.Tests
         {
             var app = new SPScom();
             app.PortName = "COM8";
-            app.open();
+            app.Open();
             app.ConnTs();
             //Assert.Fail();
         }
