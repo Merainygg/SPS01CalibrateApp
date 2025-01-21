@@ -7,7 +7,7 @@ using SPS01CalibrateAndTestNewModeApp.Enume;
 
 namespace SPS01CalibrateAndTestNewModeApp.Mode
 {
-    public class EvbSerialMode:INotifyPropertyChanged
+    public class EvbSerialModel:INotifyPropertyChanged
     {
         private readonly SerialPort _serialPort;
         private string _receivedData;
@@ -18,7 +18,9 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
         public readonly EvbCommandOfWork _evbCommandOfWork;
         public readonly EvbCommandOfConn _evbCommandOfConn;
         public readonly EvbCommandOfRaw _evbCommandOfRaw;
-        public EvbSerialMode()
+        private string _connModeName;
+        
+        public EvbSerialModel()
         {
             _serialPort = new SerialPort();
             _evbCommandOfEngine = new EvbCommandOfEngine();
@@ -33,11 +35,20 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
             get { return _receivedData; }
             set
             {
-                if (_receivedData!= value)
-                {
-                    _receivedData = value;
-                    OnPropertyChanged("ReceivedData");
-                }
+                Console.WriteLine("ReceivedData: " + value);
+                _receivedData = value;
+                OnPropertyChanged("ReceivedData");
+            }
+        }
+        
+        public string ConnModeName
+        {
+            get { return _connModeName; }
+            set
+            {
+                Console.WriteLine("ConnModeName: " + value);
+                _connModeName = value;
+                OnPropertyChanged("ConnModeName");
             }
         }
 
@@ -78,7 +89,7 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
                 if (receive != "")
                 {
                     //return;
-                    _receivedData = receive;
+                    ReceivedData = receive;
                 }
                 switch (_curMode)
                 {
@@ -165,13 +176,13 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
             return false;
         }
 
-        public bool ConnPd(string connModeName)
+        public bool ConnPd()
         {
             _connResult = null;
             _curMode = "ConnPd";
             const string cmd = "@PON\r";
             _serialPort.WriteLine(cmd);
-            SetComMode("STRT_CM","01",connModeName,false);
+            SetComMode("STRT_CM","01",false);
             var count = 0;
             while (true)
             {
@@ -191,7 +202,7 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
 
         }
         
-        public void SetComMode(string mode,string length,string connModeName, bool ismode=false)
+        public void SetComMode(string mode,string length, bool ismode=false)
         {
             if (!_evbCommandOfEngine.RunMode.Keys.Contains(mode)) return;
             if (ismode)
@@ -199,15 +210,59 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
                 _curMode = mode;
             }
 
-            var cmd = "@" + _evbCommandOfConn.ConnMode[connModeName] +"W"+ length + _deviceAddress + _evbCommandOfEngine.RunMode[mode]+"\r";
+            var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"W"+ length + _deviceAddress + _evbCommandOfEngine.RunMode[mode]+"\r";
             // System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
             _serialPort.WriteLine(cmd);
         }
 
-        public void ReadAllReg()
+        public int GetData(int jump, int avg, string register)
         {
-            
+            if (_serialPort.IsOpen == false)
+            {
+                return 0;
+            }
+            var sum = 0;
+            // 命令格式：@IR读取的长度+设备地址+读取模式+寄存器地址
+            for (var i = 0; i < (jump + avg); i++)
+            {
+                System.Threading.Thread.Sleep(50);
+                _curMode = "ReadAllReg";
+                var cmd = $"@{_evbCommandOfConn.ConnMode[ConnModeName]}R02{_deviceAddress}{_evbCommandOfWork.WorkMode["RD_OUTMEM_BURST"]}{_evbCommandOfRaw.RawAddr[register]}\r";
+                _serialPort.WriteLine(cmd);
+                while (_curMode != null)
+                {
+                    System.Threading.Thread.Sleep(5);
+                }
+                
+                if (i >= jump)
+                {
+                    sum += Convert.ToInt32(ReceivedData.Substring(0, 4), 16);
+                }
+            }
+            return sum / avg;
         }
+
+        public int GetP1Data(int jump, int avg)
+        {
+            return GetData(jump, avg, "P1");
+        }
+
+        public int GetP2Data(int jump, int avg)
+        {
+            return GetData(jump, avg, "P2");
+        }
+
+        public int GetTSIData(int jump, int avg)
+        {
+            return GetData(jump, avg, "TSI");
+        }
+
+        public int GetTSEData(int jump, int avg)
+        {
+            return GetData(jump, avg, "TSE");
+        }
+
+
 
         public void ClosePort()
         {

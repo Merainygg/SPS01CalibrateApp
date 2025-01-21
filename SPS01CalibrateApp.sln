@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPS01CalibrateAppTests", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPS01CalibrateAndTestNewModeApp", "SPS01CalibrateAndTestNewModeApp\SPS01CalibrateAndTestNewModeApp.csproj", "{C967D16B-C168-42EC-9C58-1E5C6B6C376A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPS01CalibrateAndTestApp", "SPS01CalibrateAndTestApp\SPS01CalibrateAndTestApp.csproj", "{06B41096-BB52-4DA1-AFF6-501FE2026D9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C967D16B-C168-42EC-9C58-1E5C6B6C376A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C967D16B-C168-42EC-9C58-1E5C6B6C376A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C967D16B-C168-42EC-9C58-1E5C6B6C376A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B41096-BB52-4DA1-AFF6-501FE2026D9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B41096-BB52-4DA1-AFF6-501FE2026D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B41096-BB52-4DA1-AFF6-501FE2026D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B41096-BB52-4DA1-AFF6-501FE2026D9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

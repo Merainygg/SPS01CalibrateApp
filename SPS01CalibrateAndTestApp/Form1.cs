@@ -1,4 +1,4 @@
-﻿Fusing System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using SPS01CalibrateApp;
 using TPLoopTestSystem;
 using Timer = System.Threading.Timer;
 
-namespace SPS01CalibrateApp
+namespace SPS01CalibrateAndTestApp
 {
     public partial class Form1 : Form
     {
@@ -22,11 +23,11 @@ namespace SPS01CalibrateApp
         private readonly UiConfig _uiConfig = new UiConfig();
         private const string ConfigPath = "Config/config.json";
         
-        private readonly SubCtrlForm subCtrlForm = new SubCtrlForm();
-        private readonly UnoSubForm unoSubForm = new UnoSubForm();
+        private readonly SubCtrlForm _subCtrlForm = new SubCtrlForm();
+        private readonly UnoSubForm _unoSubForm = new UnoSubForm();
         
         private string _pathScript = "";
-        private string _basePath = "";
+        private readonly string _jsonFileSavebasePath;
         
         private readonly SqlLocal _sqlLocal;
         private readonly MySqlLocal _mySqlLocal;
@@ -46,19 +47,21 @@ namespace SPS01CalibrateApp
         
         private int _focusIndex;
         private int _focusTempIndex;
+        
         // 选项卡3 数据
         private readonly byte[] _nvm = new byte[256];
         private readonly byte[] _nvmReg = new byte[256];
         
         private string _nvmUpdateMsg = "";
         private string _regUpdateMsg = "";
+        
         // 选项卡4 数据
-        private bool _noiseTesting = false;
+        private bool _noiseTesting;
         private Timer _noiseTimer;
         private string _noiseFileName = "";
-        private int _noiseCount = 0;
+        private int _noiseCount;
         private string _noiseMode = "";
-        private static object _noiseLockObj = new object();
+        private static readonly object NoiseLockObj = new object();
         
         // 选项卡5 数据
         private readonly Button[] _buttons = new Button[10];
@@ -70,22 +73,21 @@ namespace SPS01CalibrateApp
         public Form1()
         {
             InitializeComponent();
-            //数据初始化
-            //PressDict.Add("P1", 0);
-
-
+            _noiseCount = 0;
             Text = "SPS01 Calibrate App " + Application.ProductVersion;
+            
             //设置文档文件夹为基本数据存储路径
             var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            
             //创建基于软件名字的文件夹
             const string folderName = "SPS01CalibrateApp";
             var path = Path.Combine(documentPath, folderName);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            _basePath = path;
-            // 子窗体
+            _jsonFileSavebasePath = path;
             
-            ChildForm(subCtrlForm, panel1);
-            ChildForm(unoSubForm, panel2);
+            // 子窗体
+            ChildForm(_subCtrlForm, panel1);
+            ChildForm(_unoSubForm, panel2);
 
             // 总选项卡设置
             // 修改标签页的标题
@@ -109,18 +111,21 @@ namespace SPS01CalibrateApp
             labelID.Text = "";   
 
             comboBoxDut.Items.AddRange(new object[] {"DUT1", "DUT2", "DUT3", "DUT4", "DUT5", "DUT6", "DUT7", "DUT8", "DUT9", "DUT10", "DUT11", "DUT12", "DUT13", "DUT14", "DUT15", "DUT16", "DUT17", "DUT18", "DUT19", "DUT20", "DUT21", "DUT22", "DUT23", "DUT24", "DUT25", "DUT26", "DUT27", "DUT28", "DUT29", "DUT30", "DUT31", "DUT32", "DUT33", "DUT34", "DUT35", "DUT36", "DUT37", "DUT38", "DUT39", "DUT40", "DUT41", "DUT42", "DUT43", "DUT44", "DUT45", "DUT46", "DUT47", "DUT48", "DUT49", "DUT50", "DUT51", "DUT52", "DUT53", "DUT54", "DUT55", "DUT56", "DUT57", "DUT58", "DUT59", "DUT60", "DUT61", "DUT62", "DUT63", "DUT64"});
+            
             labeltype.Text = "选择类型";
             comboBoxtype.Items.AddRange(new object[] { "FullBridge", "HalfBridge" , "BothMode"});
+            
             labelmode.Text = "选择模式";
             comboBoxMode.Items.AddRange(new object[]
                 { "1T2P", "1T3P", "1T4P", "2T2P", "2T3P", "2T4P", "3T2P", "3T3P", "3T4P", "4T2P", "4T3P", "4T4P" });
+            
             labelJump.Text = "跳过点数";
             comboBoxJump.Items.AddRange(new object[] { "0", "1", "2" });
             comboBoxJump.Text = "0";
+            
             labelAvg.Text = "平均点数";
             comboBoxAvg.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
             comboBoxAvg.Text = "1";
-            //comboBoxtype.Text = "FullBridge";
 
             buttonExportRawData.Text = "导出原始数据";
             buttonImportRawData.Text = "导入原始数据";
@@ -223,7 +228,7 @@ namespace SPS01CalibrateApp
             //选项卡4 设置
 
             labelOutMemAddr.Text = "选择待读取内容";
-            comboBoxOutMemAddr.Items.AddRange(subCtrlForm.Spscom.RawAddr.Keys.ToArray());
+            comboBoxOutMemAddr.Items.AddRange(_subCtrlForm.Spscom.RawAddr.Keys.ToArray());
             buttonGetValue.Text = "获取数据";
             buttonLoop.Text = "循环测试";
             labelDataList.Text = "数据清单";
@@ -253,6 +258,7 @@ namespace SPS01CalibrateApp
             _buttons[7] = ButtonT2P2;
             _buttons[8] = ButtonT3P1;
             _buttons[9] = ButtonT3P2;
+            
             ButtonT0P1.Click += GetRawData;
             ButtonT0P2.Click += GetRawData;
             ButtonT0P3.Click += GetRawData;
@@ -372,10 +378,10 @@ namespace SPS01CalibrateApp
             var config = JsonConvert.DeserializeObject<UiConfig>(json);
             // 读取配置信息
             comboBox1.Text = config.commMode;
-            subCtrlForm.comboBox1.Text = config.evbPort;
+            _subCtrlForm.comboBox1.Text = config.evbPort;
             if (config.evbPort != "" && SerialPort.GetPortNames().Contains(config.evbPort))
             {
-                subCtrlForm.button1_Click(null, null);
+                _subCtrlForm.button1_Click(null, null);
             }
         }
 
@@ -388,23 +394,13 @@ namespace SPS01CalibrateApp
             File.WriteAllText(ConfigPath, json);
             
         }
-        
-        // 子窗体加载
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        // 子窗体加载
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-        }
 
         // 子窗体加载
         private static void ChildForm(Form childForm, Panel panel)
         {
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None; //让窗体无边界
-            childForm.Dock = DockStyle.Fill;
+            childForm.Dock = DockStyle.Fill; //让窗体填充整个panel
 
             panel.Controls.Add(childForm);
             panel.Tag = childForm;
@@ -417,7 +413,7 @@ namespace SPS01CalibrateApp
         {
             if (comboBox1.Text == "") return;
 
-            if (subCtrlForm.PortName == "")
+            if (_subCtrlForm.PortName == "")
             {
                 MessageBox.Show("请先选择串口");
                 buttonProductConnState.Text = "";
@@ -425,8 +421,8 @@ namespace SPS01CalibrateApp
                 return;
             }
 
-            subCtrlForm.Spscom.ConnModeName = comboBox1.Text;
-            if (subCtrlForm.button2.Text != "已连接")
+            _subCtrlForm.Spscom.ConnModeName = comboBox1.Text;
+            if (_subCtrlForm.button2.Text != "已连接")
             {
                 buttonProductConnState.Text = "";
                 buttonProductConnState.BackColor = Color.White;
@@ -436,25 +432,25 @@ namespace SPS01CalibrateApp
 
             if (buttonProductConnState.Text == "已连接")
             {
-                subCtrlForm.Spscom.Pd2Nm();
+                _subCtrlForm.Spscom.Pd2Nm();
                 buttonProductConnState.Text = "";
                 buttonProductConnState.BackColor = Color.White;
                 Console.WriteLine("关闭");
                 return;
             }
 
-            subCtrlForm.Spscom.DeviceAddr = textBox1.Text;
+            _subCtrlForm.Spscom.DeviceAddr = textBox1.Text;
 
-            if (subCtrlForm.Spscom.ConnPd())
+            if (_subCtrlForm.Spscom.ConnPd())
             {
                 buttonProductConnState.Text = "已连接";
                 buttonProductConnState.BackColor = Color.Green;
-                _uiConfig.evbPort = subCtrlForm.PortName;
+                _uiConfig.evbPort = _subCtrlForm.PortName;
                 _uiConfig.commMode = comboBox1.Text;
 
                 ConfigSave();
                 // 读取ID
-                labelID.Text = subCtrlForm.Spscom.GetId();
+                labelID.Text = _subCtrlForm.Spscom.GetId();
                 if (labelID.Text != "00000000") return;
                 var countResult = _sqlLocal.Select("SELECT count(*) FROM SpsData");
                 var count = 0;
@@ -485,27 +481,21 @@ namespace SPS01CalibrateApp
                 insertSql = insertSql.Replace("@updateTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 _sqlLocal.Insert(insertSql);
                 // 写入ID
-                subCtrlForm.Spscom.SetId(labelID.Text);
+                _subCtrlForm.Spscom.SetId(labelID.Text);
                 // 读取ID
-                labelID.Text = subCtrlForm.Spscom.GetId();
+                labelID.Text = _subCtrlForm.Spscom.GetId();
             }
             else
             {
                 buttonProductConnState.Text = "连接失败";
                 buttonProductConnState.BackColor = Color.Red;
             }
-            
-            
         }
         
         private void Form1_Load(object sender, EventArgs e)
         {
             timer1.Interval = 100;
             timer1.Start();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
         }
 
         private void Button4ClickForNvmTableNextPage(object sender, EventArgs e)
@@ -526,7 +516,7 @@ namespace SPS01CalibrateApp
         {
             // 选项卡3 加载临时寄存器
             Debug.WriteLine("加载临时寄存器");
-            var reg = subCtrlForm.Spscom.GetAllReg();
+            var reg = _subCtrlForm.Spscom.GetAllReg();
             //subCtrlForm.Spscom.GetAllReg();
             if (reg.Length < 512) return;
             for (var i = 0; i < 256; i++) _nvmReg[i] = Convert.ToByte(reg.Substring(i * 2, 2), 16);
@@ -539,7 +529,7 @@ namespace SPS01CalibrateApp
         private void Button6ClickForReadNvmMsg(object sender, EventArgs e)
         {
             // 选项卡3 加载永久寄存器
-            var result = subCtrlForm.Spscom.GetAllNvm();
+            var result = _subCtrlForm.Spscom.GetAllNvm();
             if (result.Length < 512) return;
             
             for (var i = 0; i < 256; i++) _nvm[i] = Convert.ToByte(result.Substring(i * 2, 2), 16);
@@ -600,20 +590,16 @@ namespace SPS01CalibrateApp
             }
         }
 
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
-        }
-
         private void ButtonClickForGetRawData(object sender, EventArgs e)
         {
             // 选项卡2 获取原始数据
 
             // 读取P1 通道压力数据
             var rawPressData = 0;
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
             if (comboBoxtype.Text == "BothMode")
             {
-                rawPressData = subCtrlForm.Spscom.GetRawdata("P1", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
+                rawPressData = _subCtrlForm.Spscom.GetRawdata("P1", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
 
                 if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                 //赋值
@@ -621,7 +607,7 @@ namespace SPS01CalibrateApp
                 _pressDict[_textBoxes[_focusIndex].Name] = rawPressData;
                 //PressDict.Add(textBoxes[foucsIndex].Name, value);
 
-                rawPressData = subCtrlForm.Spscom.GetRawdata("P2", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
+                rawPressData = _subCtrlForm.Spscom.GetRawdata("P2", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
 
                 if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                 //赋值
@@ -643,7 +629,7 @@ namespace SPS01CalibrateApp
                         return;
                 }
 
-                rawPressData = subCtrlForm.Spscom.GetRawdata(rawName, int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
+                rawPressData = _subCtrlForm.Spscom.GetRawdata(rawName, int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
 
                 if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                 //赋值
@@ -662,7 +648,7 @@ namespace SPS01CalibrateApp
 
             }
                 //读取温度数值
-                var rawTempData = subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1);
+                var rawTempData = _subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1);
                 if (rawTempData > 0x7FFF) rawTempData = rawTempData - 0x10000;
                 rawTempData = rawTempData >> 6;
                 _tempTextBoxex[_focusTempIndex].Text = rawTempData.ToString();
@@ -687,11 +673,11 @@ namespace SPS01CalibrateApp
                 
                 if (!_spsCalibrations[i].Status)
                     return;
-                subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+                _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
                 
                 if (comboBoxTypeAuto.Text == "BothMode")
                 {
-                    rawPressData = subCtrlForm.Spscom.GetRawdata("P1", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
+                    rawPressData = _subCtrlForm.Spscom.GetRawdata("P1", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
 
                     if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                     //赋值
@@ -700,7 +686,7 @@ namespace SPS01CalibrateApp
                     // _pressDict[_textBoxes[_focusIndex].Name] = rawPressData;
                     //PressDict.Add(textBoxes[foucsIndex].Name, value);
 
-                    rawPressData = subCtrlForm.Spscom.GetRawdata("P2", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
+                    rawPressData = _subCtrlForm.Spscom.GetRawdata("P2", int.Parse(comboBoxJump.Text), int.Parse(comboBoxAvg.Text));
 
                     if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                     //赋值
@@ -724,7 +710,7 @@ namespace SPS01CalibrateApp
                             return;
                     }
 
-                    rawPressData = subCtrlForm.Spscom.GetRawdata(rawName, int.Parse(comboBoxJumpAuto.Text), int.Parse(comboBoxAvgAuto.Text));
+                    rawPressData = _subCtrlForm.Spscom.GetRawdata(rawName, int.Parse(comboBoxJumpAuto.Text), int.Parse(comboBoxAvgAuto.Text));
                     if (rawPressData > 0x7FFF) rawPressData -= 0x10000;
                     switch (rawName)
                     {
@@ -753,7 +739,7 @@ namespace SPS01CalibrateApp
 
                 }
                     //读取温度数值
-                var rawTempData = subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1);
+                var rawTempData = _subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1);
                 if (rawTempData > 0x7FFF) rawTempData -= 0x10000;
                 rawTempData >>= 6;
 
@@ -805,7 +791,7 @@ namespace SPS01CalibrateApp
 
             try
             {
-                subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
+                _subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
                 var str = textBoxScripts.Text.Split('\n');
                 foreach (var t in str)
                 {
@@ -822,12 +808,12 @@ namespace SPS01CalibrateApp
                     else if (t.Contains("#") && t.Substring(0, 1) != "#")
                     {
                         var str1 = t.Split('#');
-                        subCtrlForm.Spscom.RunScript(str1[0]);
+                        _subCtrlForm.Spscom.RunScript(str1[0]);
                         //System.Diagnostics.Debug.WriteLine(str1[1]);
                     }
                     else
                     {
-                        subCtrlForm.Spscom.RunScript(t);
+                        _subCtrlForm.Spscom.RunScript(t);
                         //System.Diagnostics.Debug.WriteLine(str[i]);
                     }
                 }
@@ -953,12 +939,12 @@ namespace SPS01CalibrateApp
                 return;
             }
 
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
             int value;
             if (comboBoxOutMemAddr.Text.Contains("OFF") || comboBoxOutMemAddr.Text.Contains("FG"))
-                value = subCtrlForm.Spscom.GetMidData(comboBoxOutMemAddr.Text, 0, 1);
+                value = _subCtrlForm.Spscom.GetMidData(comboBoxOutMemAddr.Text, 0, 1);
             else
-                value = subCtrlForm.Spscom.GetRawdata(comboBoxOutMemAddr.Text, 0, 5);
+                value = _subCtrlForm.Spscom.GetRawdata(comboBoxOutMemAddr.Text, 0, 5);
             textBoxValue.Text = value.ToString();
         }
 
@@ -1001,7 +987,7 @@ namespace SPS01CalibrateApp
                 _noiseCount = 0;
                 _noiseTesting = true;
                 _noiseMode = comboBoxOutMemAddr.Text;
-                subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+                _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
                 _noiseTimer = new Timer(TimerCallback, null, 0, 80);
                 buttonLoop.Text = "停止任务";
             }
@@ -1013,7 +999,7 @@ namespace SPS01CalibrateApp
                 _noiseTimer.Dispose();
                 MessageBox.Show("噪声循环测试终止");
                 buttonLoop.Text = "循环测试";
-                toolStripStatusLabel3.Text = _basePath +"\\" + _noiseFileName + ".csv";
+                toolStripStatusLabel3.Text = _jsonFileSavebasePath +"\\" + _noiseFileName + ".csv";
             }
         }
 
@@ -1033,7 +1019,7 @@ namespace SPS01CalibrateApp
                     
                     _noiseTesting = false;
                     MessageBox.Show("噪声循环测试完成");
-                    toolStripStatusLabel3.Text = _basePath +"\\" + _noiseFileName + ".csv";
+                    toolStripStatusLabel3.Text = _jsonFileSavebasePath +"\\" + _noiseFileName + ".csv";
                     _noiseTimer.Dispose();
                     // buttonLoop.Text = "循环测试";
                     // buttonLoopText("循环测试");
@@ -1048,12 +1034,12 @@ namespace SPS01CalibrateApp
                 var value = 0;
 
 
-                lock (_noiseLockObj)
+                lock (NoiseLockObj)
                 {
-                    value = subCtrlForm.Spscom.GetRawdata(_noiseMode, 0, 1);
+                    value = _subCtrlForm.Spscom.GetRawdata(_noiseMode, 0, 1);
                     // textBoxValue.Text = value.ToString();
                     rec += value + "\n";
-                    File.AppendAllText( _basePath +"\\" + _noiseFileName+".csv", rec);
+                    File.AppendAllText( _jsonFileSavebasePath +"\\" + _noiseFileName+".csv", rec);
                 }
                 
             }
@@ -1072,7 +1058,7 @@ namespace SPS01CalibrateApp
         
         private void buttonExportRegData_Click(object sender, EventArgs e)
         {
-            if (!subCtrlForm.Spscom.SerialPort.IsOpen)
+            if (!_subCtrlForm.Spscom.SerialPort.IsOpen)
             {
                 MessageBox.Show("串口已关闭");
                 return;
@@ -1127,9 +1113,9 @@ namespace SPS01CalibrateApp
                 var jsonString = JsonConvert.SerializeObject(_spsData, Formatting.Indented);
 
                 //Console.WriteLine(jsonString);
-                File.WriteAllText(_basePath + "\\" + fileName, jsonString);
+                File.WriteAllText(_jsonFileSavebasePath + "\\" + fileName, jsonString);
                 Console.WriteLine("导出成功！");
-                toolStripStatusLabel3.Text = "文件路径" + _basePath + "\\" + fileName;
+                toolStripStatusLabel3.Text = "文件路径" + _jsonFileSavebasePath + "\\" + fileName;
                 //toolStripStatusLabel3.Text = "文件路径：" + Directory.GetCurrentDirectory();
                 //Console.WriteLine("文件路径：" + Directory.GetCurrentDirectory() + "\\" + fileName);
                 //toolStripStatusLabel3.Text = "OK";
@@ -1325,15 +1311,15 @@ namespace SPS01CalibrateApp
 
         private void P1compute()
         {
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
-            double P1raw = subCtrlForm.Spscom.GetRawdata("P1", 0, 1);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            double P1raw = _subCtrlForm.Spscom.GetRawdata("P1", 0, 1);
             if ((Convert.ToInt32(P1raw) & 0x8000) != 0) P1raw = P1raw - 0x10000;
             Console.WriteLine(P1raw);
             //double P2raw = subCtrlForm.Spscom.getRawdata("P2", 0, 1);
             //double P2O= subCtrlForm.Spscom.getRawdata("P2O", 0, 1);
             //subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
-            double P1O = subCtrlForm.Spscom.GetRawdata("P1O", 0, 1);
-            double T = subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
+            double P1O = _subCtrlForm.Spscom.GetRawdata("P1O", 0, 1);
+            double T = _subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
             //Console.WriteLine(P1raw);
             T = T - _spsData.P1Factor["baseT"];
             //Console.WriteLine(T);
@@ -1355,14 +1341,14 @@ namespace SPS01CalibrateApp
 
         private void P2compute()
         {
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
             //double P1raw = subCtrlForm.Spscom.getRawdata("P1", 0, 1);
-            double P2raw = subCtrlForm.Spscom.GetRawdata("P2", 0, 1);
+            double P2raw = _subCtrlForm.Spscom.GetRawdata("P2", 0, 1);
             if ((Convert.ToInt32(P2raw) & 0x8000) != 0) P2raw = P2raw - 0x10000;
-            double P2O = subCtrlForm.Spscom.GetRawdata("P2O", 0, 1);
+            double P2O = _subCtrlForm.Spscom.GetRawdata("P2O", 0, 1);
             //subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
             //double P1O = subCtrlForm.Spscom.getRawdata("P1O", 0, 1);
-            double T = subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
+            double T = _subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
             //Console.WriteLine(P1raw);
             T = T - _spsData.P2Factor["baseT"];
             Console.WriteLine(T);
@@ -1390,13 +1376,13 @@ namespace SPS01CalibrateApp
 
         private void TSIcompute()
         {
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
-            double TSIraw = subCtrlForm.Spscom.GetRawdata("TSI", 0, 1);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            double TSIraw = _subCtrlForm.Spscom.GetRawdata("TSI", 0, 1);
             if ((Convert.ToInt32(TSIraw) & 0x8000) != 0) TSIraw = TSIraw - 0x10000;
             _spsData.TSI = TSIraw;
             TSIraw = TSIraw / (1 << 15);
 
-            double T = subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
+            double T = _subCtrlForm.Spscom.GetRawdata("TSIO", 0, 1) / 64;
             // TsiComp = kt*TSIraw/(1+mt*TSIraw)-toff
             var TSIComp = _spsData.TSIFactor["k"] * TSIraw / (1 + _spsData.TSIFactor["m"] * TSIraw) -
                           _spsData.TSIFactor["Toff"];
@@ -1406,12 +1392,12 @@ namespace SPS01CalibrateApp
 
         private void TSEcompute()
         {
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
-            double TSEraw = subCtrlForm.Spscom.GetRawdata("TSE", 0, 1);
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            double TSEraw = _subCtrlForm.Spscom.GetRawdata("TSE", 0, 1);
             if ((Convert.ToInt32(TSEraw) & 0x8000) != 0) TSEraw = TSEraw - 0x10000;
             _spsData.TSE = TSEraw;
             TSEraw = TSEraw / (1 << 15);
-            double T = subCtrlForm.Spscom.GetRawdata("TSEO", 0, 1) / 64;
+            double T = _subCtrlForm.Spscom.GetRawdata("TSEO", 0, 1) / 64;
             // TCSIComp = (TSEraw-mt)*(1+kts*(TSEraw-mt)/kt-t0
             var TSEComp =
                 (TSEraw - _spsData.TSEFactor["mt"]) *
@@ -1426,17 +1412,17 @@ namespace SPS01CalibrateApp
             //选项卡四
             //根据当前所有的outmem 获取所有的数据并添加在listbox 中
             // subCtrlForm.Spscom.RawAddr.Keys.ToArray()
-            var items = subCtrlForm.Spscom.RawAddr.Keys.ToArray();
-            subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
+            var items = _subCtrlForm.Spscom.RawAddr.Keys.ToArray();
+            _subCtrlForm.Spscom.SetComMode("STRT_MEAS", "01", true);
             listBoxDataList.Items.Clear();
             //int value = 
             foreach (var t in items)
             {
                 int value;
                 if (t.Contains("OFF") || t.Contains("FG"))
-                    value = subCtrlForm.Spscom.GetMidData(t, 0, 1);
+                    value = _subCtrlForm.Spscom.GetMidData(t, 0, 1);
                 else
-                    value = subCtrlForm.Spscom.GetRawdata(t, 0, 1);
+                    value = _subCtrlForm.Spscom.GetRawdata(t, 0, 1);
 
                 //textBoxValue.Text = value.ToString();
                 // 将项目和数据添加到listbox 中
@@ -1450,7 +1436,7 @@ namespace SPS01CalibrateApp
 
             try
             {
-                subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
+                _subCtrlForm.Spscom.SetComMode("STRT_CM", "01", true);
                 var str = textBoxDACTest.Text.Split('\n');
                 foreach (var t in str)
                 {
@@ -1467,12 +1453,12 @@ namespace SPS01CalibrateApp
                     else if (t.Contains("#") && t.Substring(0, 1) != "#")
                     {
                         var str1 = t.Split('#');
-                        subCtrlForm.Spscom.RunScript(str1[0]);
+                        _subCtrlForm.Spscom.RunScript(str1[0]);
                         //System.Diagnostics.Debug.WriteLine(str1[1]);
                     }
                     else
                     {
-                        subCtrlForm.Spscom.RunScript(t);
+                        _subCtrlForm.Spscom.RunScript(t);
                         //System.Diagnostics.Debug.WriteLine(str[i]);
                     }
                 }
@@ -1484,7 +1470,7 @@ namespace SPS01CalibrateApp
                 MessageBox.Show("脚本存在错误");
             }
 
-            subCtrlForm.Spscom.Pd2Nm();
+            _subCtrlForm.Spscom.Pd2Nm();
             buttonProductConnState.Text = "";
         }
 
