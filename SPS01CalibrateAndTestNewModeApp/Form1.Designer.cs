@@ -29,6 +29,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.airTabPage1 = new ReaLTaiizor.Controls.AirTabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ButtonProductConn = new ReaLTaiizor.Controls.Button();
@@ -51,6 +54,8 @@
             this.ComRawDataJumpPoint = new ReaLTaiizor.Controls.AloneComboBox();
             this.ComRawMode = new ReaLTaiizor.Controls.AloneComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.TextBoxTT1 = new ReaLTaiizor.Controls.AloneTextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.textBoxT0P2 = new ReaLTaiizor.Controls.AloneTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -79,6 +84,22 @@
             this.textBoxO4 = new ReaLTaiizor.Controls.AloneTextBox();
             this.textBoxT0P4 = new ReaLTaiizor.Controls.AloneTextBox();
             this.textBoxT0P3 = new ReaLTaiizor.Controls.AloneTextBox();
+            this.TextBoxTT0 = new ReaLTaiizor.Controls.AloneTextBox();
+            this.TextBoxTT2 = new ReaLTaiizor.Controls.AloneTextBox();
+            this.TextBoxTT3 = new ReaLTaiizor.Controls.AloneTextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.LabelCurrentPage = new ReaLTaiizor.Controls.CrownLabel();
+            this.ButtonPageSub = new ReaLTaiizor.Controls.AirButton();
+            this.ButtonPageAdd = new ReaLTaiizor.Controls.AirButton();
+            this.poisonDataGridView1 = new ReaLTaiizor.Controls.PoisonDataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.miniToolStrip = new ReaLTaiizor.Controls.CrownStatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -87,6 +108,8 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.poisonDataGridView1)).BeginInit();
             this.miniToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
             this.SuspendLayout();
@@ -97,6 +120,7 @@
             this.airTabPage1.BaseColor = System.Drawing.Color.White;
             this.airTabPage1.Controls.Add(this.tabPage1);
             this.airTabPage1.Controls.Add(this.tabPage2);
+            this.airTabPage1.Controls.Add(this.tabPage3);
             this.airTabPage1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.airTabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.airTabPage1.ItemSize = new System.Drawing.Size(30, 115);
@@ -402,6 +426,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66736F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66736F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66319F));
+            this.tableLayoutPanel1.Controls.Add(this.TextBoxTT1, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.textBoxT0P2, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.label10, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.label9, 5, 0);
@@ -430,6 +456,9 @@
             this.tableLayoutPanel1.Controls.Add(this.textBoxO4, 5, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxT0P4, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxT0P3, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.TextBoxTT0, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.TextBoxTT2, 3, 6);
+            this.tableLayoutPanel1.Controls.Add(this.TextBoxTT3, 4, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(38, 172);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 7;
@@ -442,6 +471,33 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(505, 214);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // TextBoxTT1
+            // 
+            this.TextBoxTT1.BackColor = System.Drawing.Color.Transparent;
+            this.TextBoxTT1.EnabledCalc = true;
+            this.TextBoxTT1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.TextBoxTT1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(133)))), ((int)(((byte)(142)))));
+            this.TextBoxTT1.Location = new System.Drawing.Point(87, 183);
+            this.TextBoxTT1.MaxLength = 32767;
+            this.TextBoxTT1.MultiLine = false;
+            this.TextBoxTT1.Name = "TextBoxTT1";
+            this.TextBoxTT1.ReadOnly = false;
+            this.TextBoxTT1.Size = new System.Drawing.Size(78, 23);
+            this.TextBoxTT1.TabIndex = 17;
+            this.TextBoxTT1.Text = "aloneTextBox1";
+            this.TextBoxTT1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TextBoxTT1.UseSystemPasswordChar = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.Location = new System.Drawing.Point(3, 180);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(73, 21);
+            this.label11.TabIndex = 29;
+            this.label11.Text = "目标值";
             // 
             // textBoxT0P2
             // 
@@ -849,6 +905,203 @@
             this.textBoxT0P3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0P3.UseSystemPasswordChar = false;
             // 
+            // TextBoxTT0
+            // 
+            this.TextBoxTT0.BackColor = System.Drawing.Color.Transparent;
+            this.TextBoxTT0.EnabledCalc = true;
+            this.TextBoxTT0.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.TextBoxTT0.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(133)))), ((int)(((byte)(142)))));
+            this.TextBoxTT0.Location = new System.Drawing.Point(171, 183);
+            this.TextBoxTT0.MaxLength = 32767;
+            this.TextBoxTT0.MultiLine = false;
+            this.TextBoxTT0.Name = "TextBoxTT0";
+            this.TextBoxTT0.ReadOnly = false;
+            this.TextBoxTT0.Size = new System.Drawing.Size(78, 23);
+            this.TextBoxTT0.TabIndex = 30;
+            this.TextBoxTT0.Text = "aloneTextBox2";
+            this.TextBoxTT0.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TextBoxTT0.UseSystemPasswordChar = false;
+            // 
+            // TextBoxTT2
+            // 
+            this.TextBoxTT2.BackColor = System.Drawing.Color.Transparent;
+            this.TextBoxTT2.EnabledCalc = true;
+            this.TextBoxTT2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.TextBoxTT2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(133)))), ((int)(((byte)(142)))));
+            this.TextBoxTT2.Location = new System.Drawing.Point(255, 183);
+            this.TextBoxTT2.MaxLength = 32767;
+            this.TextBoxTT2.MultiLine = false;
+            this.TextBoxTT2.Name = "TextBoxTT2";
+            this.TextBoxTT2.ReadOnly = false;
+            this.TextBoxTT2.Size = new System.Drawing.Size(78, 23);
+            this.TextBoxTT2.TabIndex = 31;
+            this.TextBoxTT2.Text = "aloneTextBox3";
+            this.TextBoxTT2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TextBoxTT2.UseSystemPasswordChar = false;
+            // 
+            // TextBoxTT3
+            // 
+            this.TextBoxTT3.BackColor = System.Drawing.Color.Transparent;
+            this.TextBoxTT3.EnabledCalc = true;
+            this.TextBoxTT3.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.TextBoxTT3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(133)))), ((int)(((byte)(142)))));
+            this.TextBoxTT3.Location = new System.Drawing.Point(339, 183);
+            this.TextBoxTT3.MaxLength = 32767;
+            this.TextBoxTT3.MultiLine = false;
+            this.TextBoxTT3.Name = "TextBoxTT3";
+            this.TextBoxTT3.ReadOnly = false;
+            this.TextBoxTT3.Size = new System.Drawing.Size(78, 23);
+            this.TextBoxTT3.TabIndex = 32;
+            this.TextBoxTT3.Text = "aloneTextBox4";
+            this.TextBoxTT3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.TextBoxTT3.UseSystemPasswordChar = false;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.White;
+            this.tabPage3.Controls.Add(this.LabelCurrentPage);
+            this.tabPage3.Controls.Add(this.ButtonPageSub);
+            this.tabPage3.Controls.Add(this.ButtonPageAdd);
+            this.tabPage3.Controls.Add(this.poisonDataGridView1);
+            this.tabPage3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabPage3.Location = new System.Drawing.Point(119, 4);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(677, 460);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            // 
+            // LabelCurrentPage
+            // 
+            this.LabelCurrentPage.ForeColor = System.Drawing.Color.Black;
+            this.LabelCurrentPage.Location = new System.Drawing.Point(382, 70);
+            this.LabelCurrentPage.Name = "LabelCurrentPage";
+            this.LabelCurrentPage.Size = new System.Drawing.Size(33, 25);
+            this.LabelCurrentPage.TabIndex = 3;
+            this.LabelCurrentPage.Text = "1";
+            this.LabelCurrentPage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ButtonPageSub
+            // 
+            this.ButtonPageSub.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonPageSub.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonPageSub.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonPageSub.Image = null;
+            this.ButtonPageSub.Location = new System.Drawing.Point(319, 71);
+            this.ButtonPageSub.Name = "ButtonPageSub";
+            this.ButtonPageSub.NoRounding = false;
+            this.ButtonPageSub.Size = new System.Drawing.Size(57, 24);
+            this.ButtonPageSub.TabIndex = 2;
+            this.ButtonPageSub.Text = "上一页";
+            this.ButtonPageSub.Transparent = false;
+            // 
+            // ButtonPageAdd
+            // 
+            this.ButtonPageAdd.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonPageAdd.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonPageAdd.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonPageAdd.Image = null;
+            this.ButtonPageAdd.Location = new System.Drawing.Point(421, 71);
+            this.ButtonPageAdd.Name = "ButtonPageAdd";
+            this.ButtonPageAdd.NoRounding = false;
+            this.ButtonPageAdd.Size = new System.Drawing.Size(57, 24);
+            this.ButtonPageAdd.TabIndex = 1;
+            this.ButtonPageAdd.Text = "下一页";
+            this.ButtonPageAdd.Transparent = false;
+            // 
+            // poisonDataGridView1
+            // 
+            this.poisonDataGridView1.AllowUserToResizeRows = false;
+            this.poisonDataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.poisonDataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.poisonDataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.poisonDataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.poisonDataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.poisonDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.poisonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Column1, this.Column2, this.Column3, this.Column4, this.Column5, this.Column6, this.Column7, this.Column8 });
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.poisonDataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.poisonDataGridView1.EnableHeadersVisualStyles = false;
+            this.poisonDataGridView1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poisonDataGridView1.GridColor = System.Drawing.Color.Black;
+            this.poisonDataGridView1.Location = new System.Drawing.Point(40, 101);
+            this.poisonDataGridView1.Name = "poisonDataGridView1";
+            this.poisonDataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.poisonDataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.poisonDataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.poisonDataGridView1.RowTemplate.Height = 23;
+            this.poisonDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.poisonDataGridView1.Size = new System.Drawing.Size(578, 287);
+            this.poisonDataGridView1.TabIndex = 0;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "00";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 50;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "01";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 50;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "02";
+            this.Column3.Name = "Column3";
+            this.Column3.Width = 50;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "03";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 50;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "04";
+            this.Column5.Name = "Column5";
+            this.Column5.Width = 50;
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "05";
+            this.Column6.Name = "Column6";
+            this.Column6.Width = 50;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "06";
+            this.Column7.Name = "Column7";
+            this.Column7.Width = 50;
+            // 
+            // Column8
+            // 
+            this.Column8.HeaderText = "07";
+            this.Column8.Name = "Column8";
+            this.Column8.Width = 50;
+            // 
             // miniToolStrip
             // 
             this.miniToolStrip.AutoSize = false;
@@ -896,11 +1149,37 @@
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.poisonDataGridView1)).EndInit();
             this.miniToolStrip.ResumeLayout(false);
             this.miniToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private ReaLTaiizor.Controls.CrownLabel LabelCurrentPage;
+
+        private ReaLTaiizor.Controls.AirButton ButtonPageAdd;
+        private ReaLTaiizor.Controls.AirButton ButtonPageSub;
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+
+        private System.Windows.Forms.TabPage tabPage3;
+        private ReaLTaiizor.Controls.PoisonDataGridView poisonDataGridView1;
+
+        private ReaLTaiizor.Controls.AloneTextBox TextBoxTT1;
+        private ReaLTaiizor.Controls.AloneTextBox TextBoxTT0;
+        private ReaLTaiizor.Controls.AloneTextBox TextBoxTT2;
+        private ReaLTaiizor.Controls.AloneTextBox TextBoxTT3;
+
+        private System.Windows.Forms.Label label11;
 
         private ReaLTaiizor.Controls.HopeButton ButtonGetRawData;
 

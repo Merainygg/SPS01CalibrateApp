@@ -30,6 +30,8 @@ namespace SPS01CalibrateAndTestNewModeApp
             // 设置子选项卡的名字
             tabPage1.Text = "设置";
             tabPage2.Text = "标定";
+            tabPage3.Text = "寄存器";
+
             
             _textBox = new ReaLTaiizor.Controls.AloneTextBox[10];
             _textBox[0] = textBoxT0P1;
@@ -180,6 +182,11 @@ namespace SPS01CalibrateAndTestNewModeApp
             textBoxT2.DataBindings.Add("Visible", _individualCalibrateViewModel, "T2Visible");
             textBoxT3.DataBindings.Add("Visible", _individualCalibrateViewModel, "T3Visible");
             
+            TextBoxTT0.DataBindings.Add("Visible", _individualCalibrateViewModel, "TT0Visible");
+            TextBoxTT1.DataBindings.Add("Visible", _individualCalibrateViewModel, "TT1Visible");
+            TextBoxTT2.DataBindings.Add("Visible", _individualCalibrateViewModel, "TT2Visible");
+            TextBoxTT3.DataBindings.Add("Visible", _individualCalibrateViewModel, "TT3Visible");
+            
             ComCalibrateMode.SelectedIndexChanged += (sender, e) =>
             {
                 _individualCalibrateViewModel.UpdateTextboxVisibilities();
@@ -215,6 +222,33 @@ namespace SPS01CalibrateAndTestNewModeApp
                 }
                 
             };
+            
+            
+            
+            poisonDataGridView1.RowCount = 8;
+            poisonDataGridView1.RowHeadersVisible = true;
+
+            // 设置行头宽度
+            poisonDataGridView1.RowHeadersWidth = 15; // 根据需要调整
+            poisonDataGridView1.RowHeadersVisible = false; // 显示行头
+            // 添加自定义列
+
+            DataGridViewColumn rowNumberColumn = new DataGridViewTextBoxColumn();
+            rowNumberColumn.HeaderText = "行号";
+            rowNumberColumn.Name = "RowNumber";
+            rowNumberColumn.ReadOnly = true; // 设置为只读
+            rowNumberColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight; // 右对齐
+
+            // 将新列添加到列集合中
+            poisonDataGridView1.Columns.Insert(0, rowNumberColumn);
+
+            // 设置列的宽度
+            rowNumberColumn.Width = 80; // 根据需要调整
+
+
+            poisonDataGridView1.Size = new Size(80 * 9, 23 * 8 + 21);
+            poisonDataGridView1.ScrollBars = ScrollBars.None;
+
 
         }
 
@@ -240,5 +274,6 @@ namespace SPS01CalibrateAndTestNewModeApp
             timer1.Interval = 100;
             timer1.Start();
         }
+        
     }
 }

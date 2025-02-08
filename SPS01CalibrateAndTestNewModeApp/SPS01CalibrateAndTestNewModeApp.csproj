@@ -61,12 +61,14 @@
         </Compile>
         <Compile Include="Model\EvbSerialModel.cs" />
         <Compile Include="Model\RawDataModel.cs" />
-        <Compile Include="Model\IndividualCalibrateMode.cs" />
+        <Compile Include="Model\IndividualCalibrateModel.cs" />
         <Compile Include="Model\Item.cs" />
+        <Compile Include="Model\RegDisplayModel.cs" />
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="ViewMode\EvbViewModel.cs" />
         <Compile Include="ViewMode\IndividualCalibrateViewModel.cs" />
+        <Compile Include="ViewMode\RegViewModel.cs" />
         <EmbeddedResource Include="Form1.resx">
           <DependentUpon>Form1.cs</DependentUpon>
         </EmbeddedResource>

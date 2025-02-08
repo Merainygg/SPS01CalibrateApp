@@ -8,11 +8,11 @@ using SPS01CalibrateAndTestNewModeApp.Enume;
 
 namespace SPS01CalibrateAndTestNewModeApp.Mode
 {
-    public class IndividualCalibrateMode:INotifyPropertyChanged
+    public class IndividualCalibrateModel:INotifyPropertyChanged
     {
         
 
-        public IndividualCalibrateMode()
+        public IndividualCalibrateModel()
         {
             
         }

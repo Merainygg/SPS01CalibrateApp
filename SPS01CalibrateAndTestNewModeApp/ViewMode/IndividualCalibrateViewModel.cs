@@ -44,6 +44,12 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
         private bool _o3Visible;
         private bool _o4Visible;
         
+        private bool _tt0Visible;
+        private bool _tt1Visible;
+        private bool _tt2Visible;
+        private bool _tt3Visible;
+        
+        
         public List<string> RawDataMode
         {
             get { return _rawDataMode; }
@@ -359,6 +365,57 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
             }
         }
         
+        public bool TT0Visible
+        {
+            get { return _tt0Visible; }
+            set
+            {
+                if (_tt0Visible!= value)
+                {
+                    _tt0Visible = value;
+                    OnPropertyChanged("TT0Visible");
+                }
+            }
+        }
+        public bool TT1Visible
+        {
+            get { return _tt1Visible; }
+            set
+            {
+                if (_tt1Visible!= value)
+                {
+                    _tt1Visible = value;
+                    OnPropertyChanged("TT1Visible");
+                }
+            }
+        }
+        
+        public bool TT2Visible
+        {
+            get { return _tt2Visible; }
+            set
+            {
+                if (_tt2Visible!= value)
+                {
+                    _tt2Visible = value;
+                    OnPropertyChanged("TT2Visible");
+                }
+            }
+        }
+        
+        public bool TT3Visible
+        {
+            get { return _tt3Visible; }
+            set
+            {
+                if (_tt3Visible!= value)
+                {
+                    _tt3Visible = value;
+                    OnPropertyChanged("TT3Visible");
+                }
+            }
+        }
+        
         public IndividualCalibrateViewModel()
         {
             _evbSerialModel = ServiceContainer.Resolve<EvbSerialModel>();
@@ -400,6 +457,11 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
            O3Visible = false;
            O4Visible = false;
            
+           TT0Visible = true;
+           TT1Visible = false;
+           TT2Visible = false;
+           TT3Visible = false;
+           
            var Tpoint = SelectedRawCalibrateMode.Substring(0, 1);
            var Ppoint = SelectedRawCalibrateMode.Substring(2, 1);
            switch (Ppoint)
@@ -422,6 +484,7 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
                    T1p1Visible = true;
                    T1p2Visible = true;
                    T1Visible = true;
+                   TT1Visible = true;
                    break;
                case "3":
                    T1p1Visible = true;
@@ -430,6 +493,8 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
                    T2p2Visible = true;
                    T1Visible = true;
                    T2Visible = true;
+                   TT1Visible = true;
+                   TT2Visible = true;
                    break;
                case "4":
                    T1p1Visible = true;
@@ -442,6 +507,9 @@ namespace SPS01CalibrateAndTestNewModeApp.ViewMode
                    T2Visible = true;
                    T3Visible = true;
                    
+                   TT1Visible = true;
+                   TT2Visible = true;
+                   TT3Visible = true;
                    break;
                default:
                    break;
