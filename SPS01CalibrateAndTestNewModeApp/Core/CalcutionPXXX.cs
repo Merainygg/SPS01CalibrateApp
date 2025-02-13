@@ -9,7 +9,7 @@ using MathNet.Symbolics;
 // using MathNet.Symbolics.Algebra;
 
 
-namespace SPS01CalibrateApp
+namespace SPS01CalibrateAndTestNewModeApp.Core
 {
     public class CalcutionPxxx
 {
@@ -20,14 +20,14 @@ namespace SPS01CalibrateApp
     private string source_data_format;
     private string asic;
     public List<double> abcd;
-    private double s0;
-    public double f0;
-    private double k2;
-    private double k3;
-    private double stc1;
-    private double stc2;
-    private double ftc1;
-    private double ftc2;
+    private double? s0;
+    public double? f0;
+    private double? k2;
+    private double? k3;
+    private double? stc1;
+    private double? stc2;
+    private double? ftc1;
+    private double? ftc2;
     private double baseT;
     private List<double> btemp;
     private Dictionary<string, double> coefficient;
@@ -70,11 +70,12 @@ namespace SPS01CalibrateApp
 
     private List<double> NormalizePress(List<double> press, string asic)
     {
-        if (asic.ToUpper() == "P100")
+        if (asic == "p100")
         {
             for (int i = 0; i < press.Count; i++)
             {
                 press[i] /= 8388608;
+                Console.WriteLine(press[i]);
             }
         }
         else
@@ -104,10 +105,10 @@ namespace SPS01CalibrateApp
     public void SolveAbc()
     {
         var f = new List<List<double>>();
-        for (int j = 0; j < x.Count; j++)
+        for (var j = 0; j < x.Count; j++)
         {
             var xarr = new List<double>();
-            for (int i = 0; i < x.Count; i++)
+            for (var i = 0; i < x.Count; i++)
             {
                 xarr.Add(Math.Pow(x[j], i));
             }
@@ -143,6 +144,10 @@ namespace SPS01CalibrateApp
         
         var solutions = FindRoots.Polynomial(abcd.ToArray()); 
         // Console.WriteLine(solutions);
+        foreach (var solution in solutions)
+        {
+            Console.WriteLine(solution);
+        }
         foreach (var solution in solutions.Where(solution => solution.Imaginary == 0).Where(solution => solution.Real >= 0 && solution.Real <= 1))
         {
             f0 = solution.Real;
@@ -150,31 +155,9 @@ namespace SPS01CalibrateApp
    
     }
 
-    public void SolveS0()
-    {
-        s0 = 0;
-        for (int i = 0; i < abcd.Count - 1; i++)
-        {
-            s0 += (abcd.Count-i-1)*Math.Pow(f0, abcd.Count-i-2)*abcd[i];
-        }
-    }
-
     public void SolveK2()
     {
-        k2 = abcd[1]+3*abcd[0]*f0/s0*s0;   
-    }
-    
-    public void SolveK3()
-    {
-        k3 = abcd[0]/Math.Pow(s0,3);
-    }
-
-    public void solveBtemp()
-    {
-        foreach (var target in y)
-        {
-            
-        }
+        
     }
 }
 }

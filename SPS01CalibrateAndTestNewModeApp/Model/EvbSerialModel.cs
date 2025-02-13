@@ -214,7 +214,186 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
             // System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
             _serialPort.WriteLine(cmd);
         }
+        
+        public string GetId()
+        {
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+            _curMode = "ReadAllReg";
+            var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] + "R04" + _deviceAddress + _evbCommandOfWork.WorkMode["RD_NVMREG_BURST"] + "F9" + "\r";
+            _serialPort.WriteLine(cmd);
+            var count = 0;
+            while (_curMode!= null)
+            {
+                count++;
+                if (count > 20)
+                {
+                    return "";
+                    // break;
+                }
+                System.Threading.Thread.Sleep(5);
+            }
+            var Id = _receivedData.Substring(0, 8);
+            return Id;
+        }
 
+        public void SetId(string id)
+        {
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+            _curMode = "ReadAllReg";
+            RunScript("12F9"+id.Substring(0,2));
+            RunScript("12FA" + id.Substring(2, 2));
+            RunScript("12FB" + id.Substring(4, 2));
+            RunScript("12FC" + id.Substring(6, 2));
+            RunScript("B03C5B");
+            RunScript("810000");
+            RunScript("A10000");
+            RunScript("A00000");
+            System.Threading.Thread.Sleep(300);
+            RunScript("820000");
+        }
+        
+        public string GetAllNvm()
+        {
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+            RunScript("B03C5B");
+            RunScript("810000");
+            System.Threading.Thread.Sleep(50);
+            var nvm = "";
+            for (var i = 0; i < 4; i++)
+            {
+                _curMode = "ReadAllReg";
+                var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"R40" + _deviceAddress + _evbCommandOfWork.WorkMode["RD_NVM_BURST"] + (i * 64).ToString("X2") + "\r";
+                _serialPort.WriteLine(cmd);
+                var count = 0;
+                while (_curMode != null)
+                {
+                    count++;
+                    if (count > 20)
+                    {
+                        break;
+                    }
+                    System.Threading.Thread.Sleep(5);
+                }
+                try
+                {
+                    nvm += _receivedData.Substring(0, 128);
+                }
+                // nvm += _receivedData.Substring(0, 128);
+                catch (Exception e)
+                {
+                    // 处理异常，例如显示错误消息
+                    // MessageBox.Show($"Error reading from serial port: {e.Message}");
+                    // 0 重复128次
+                    nvm += new string('0', 128);
+                }
+            }
+            RunScript("820000");
+
+            return nvm;
+
+        }
+        
+        public string GetAllReg()
+        {
+
+            SetComMode("STRT_CM", "01", true);
+            System.Threading.Thread.Sleep(50);
+
+            var reg = "";
+            for (var i = 0; i < 4; i++) { 
+                _curMode = "ReadAllReg";
+                var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"R40" + _deviceAddress + _evbCommandOfWork.WorkMode["RD_NVMREG_BURST"] + (i*64).ToString("X2") +"\r";
+                _serialPort.WriteLine(cmd);
+                var count = 0;
+                while (_curMode != null)
+                {
+                    count++;
+                    if (count > 20)
+                    {
+                        break;
+                    }
+                    //Console.WriteLine(reg);-
+                    System.Threading.Thread.Sleep(5);
+                }
+                try
+                {
+                    reg += _receivedData.Substring(0, 128);
+                }
+                catch (Exception e)
+                {
+                   reg += new string('0', 128);
+                }
+            }
+
+            return reg;
+
+        }
+
+        public int Get3ByteRawData(string rawMode, int jump, int avg)
+        {
+
+            if (_serialPort.IsOpen == false)
+            {
+                return 0;
+            }
+            var sum = 0;
+            // 命令格式：@IR读取的长度+设备地址+读取模式+寄存器地址
+            SetComMode("STRT_MEAS", "01", true);
+            System.Threading.Thread.Sleep(50);
+            for (var i = 0; i < (jump + avg); i++)
+            {
+
+                System.Threading.Thread.Sleep(50);
+                _curMode = "ReadAllReg";
+                var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"R03" + _deviceAddress + _evbCommandOfWork.WorkMode["RD_OUTMEM_BURST"] + _evbCommandOfRaw.RawAddr[rawMode] + "\r";
+                System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
+                _serialPort.WriteLine(cmd);
+                while (_curMode != null)
+                {
+                    System.Threading.Thread.Sleep(5);
+                }
+                if (i >= jump)
+                {
+                    sum += Convert.ToInt32(ReceivedData.Substring(0, 6), 16);
+                }
+            }
+            return sum / avg;
+        }
+        
+        public int Get2ByteRawData(string rawMode,int jump,int avg)
+        {
+
+            if (_serialPort.IsOpen == false)
+            {
+                return 0;
+            }
+            var sum = 0;
+            // 命令格式：@IR读取的长度+设备地址+读取模式+寄存器地址
+            //SetComMode("STRT_MEAS", "01", true);
+            for (var i = 0; i < (jump+avg); i++)
+            {
+
+                System.Threading.Thread.Sleep(50);
+                _curMode = "ReadAllReg";
+                var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"R02" + _deviceAddress + _evbCommandOfWork.WorkMode["RD_OUTMEM_BURST"] + _evbCommandOfRaw.RawAddr[rawMode] + "\r";
+                //System.Diagnostics.Debug.WriteLine("cmd:" + cmd);
+                _serialPort.WriteLine(cmd);
+                while (_curMode != null)
+                {
+                    System.Threading.Thread.Sleep(5);
+                }
+                if (i >= jump)
+                {
+                    sum += Convert.ToInt32(ReceivedData.Substring(0, 4), 16);
+                }
+            }
+            return sum / avg;
+            //return 0;
+        }
+        
         public int GetData(int jump, int avg, string register)
         {
             if (_serialPort.IsOpen == false)
@@ -261,9 +440,17 @@ namespace SPS01CalibrateAndTestNewModeApp.Mode
         {
             return GetData(jump, avg, "TSE");
         }
+        
+        internal void RunScript(string command)
+        {
+            command = command.Trim();
 
-
-
+            var cmd = "@" + _evbCommandOfConn.ConnMode[ConnModeName] +"W01" + _deviceAddress + command + "\r";
+            _serialPort.WriteLine(cmd);
+            System.Threading.Thread.Sleep(10);
+            
+        }
+        
         public void ClosePort()
         {
             if (_serialPort.IsOpen)

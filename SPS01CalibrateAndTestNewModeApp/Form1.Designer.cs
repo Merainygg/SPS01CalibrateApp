@@ -21,7 +21,7 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Windows SubForm Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -42,6 +42,8 @@
             this.ComboxEvbPortList = new ReaLTaiizor.Controls.AloneComboBox();
             this.LabelEvbPort = new ReaLTaiizor.Controls.SkyLabel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.ButtonCalibration = new ReaLTaiizor.Controls.HopeButton();
+            this.ButtonGetId = new ReaLTaiizor.Controls.HopeButton();
             this.ButtonGetRawData = new ReaLTaiizor.Controls.HopeButton();
             this.materialLabel6 = new ReaLTaiizor.Controls.MaterialLabel();
             this.LabelID = new ReaLTaiizor.Controls.MaterialLabel();
@@ -88,6 +90,11 @@
             this.TextBoxTT2 = new ReaLTaiizor.Controls.AloneTextBox();
             this.TextBoxTT3 = new ReaLTaiizor.Controls.AloneTextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.labelRegUpdateMsg = new ReaLTaiizor.Controls.CrownLabel();
+            this.ButtonGetRegData = new ReaLTaiizor.Controls.AirButton();
+            this.ButtonGetNvmData = new ReaLTaiizor.Controls.AirButton();
+            this.materialLabel5 = new ReaLTaiizor.Controls.MaterialLabel();
+            this.ComBoxRegDisplayModel = new ReaLTaiizor.Controls.AloneComboBox();
             this.LabelCurrentPage = new ReaLTaiizor.Controls.CrownLabel();
             this.ButtonPageSub = new ReaLTaiizor.Controls.AirButton();
             this.ButtonPageAdd = new ReaLTaiizor.Controls.AirButton();
@@ -100,31 +107,44 @@
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.ListBoxAllOutValue = new ReaLTaiizor.Controls.DungeonListBox();
+            this.ButtonGetAllOutData = new ReaLTaiizor.Controls.AirButton();
+            this.ButtonGetOutData = new ReaLTaiizor.Controls.AirButton();
+            this.textOutValue = new ReaLTaiizor.Controls.AloneTextBox();
+            this.materialLabel7 = new ReaLTaiizor.Controls.MaterialLabel();
+            this.ComboxOutName = new ReaLTaiizor.Controls.AloneComboBox();
             this.miniToolStrip = new ReaLTaiizor.Controls.CrownStatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Timers.Timer();
+            this.crownMenuStrip1 = new ReaLTaiizor.Controls.CrownMenuStrip();
+            this.MenuItemDataView = new System.Windows.Forms.ToolStripMenuItem();
             this.airTabPage1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.poisonDataGridView1)).BeginInit();
+            this.tabPage4.SuspendLayout();
             this.miniToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
+            this.crownMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // airTabPage1
             // 
             this.airTabPage1.Alignment = System.Windows.Forms.TabAlignment.Left;
+            this.airTabPage1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.airTabPage1.BaseColor = System.Drawing.Color.White;
             this.airTabPage1.Controls.Add(this.tabPage1);
             this.airTabPage1.Controls.Add(this.tabPage2);
             this.airTabPage1.Controls.Add(this.tabPage3);
+            this.airTabPage1.Controls.Add(this.tabPage4);
             this.airTabPage1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.airTabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.airTabPage1.ItemSize = new System.Drawing.Size(30, 115);
-            this.airTabPage1.Location = new System.Drawing.Point(0, 0);
+            this.airTabPage1.Location = new System.Drawing.Point(0, 25);
+            this.airTabPage1.Margin = new System.Windows.Forms.Padding(3, 25, 3, 3);
             this.airTabPage1.Multiline = true;
             this.airTabPage1.Name = "airTabPage1";
             this.airTabPage1.NormalTextColor = System.Drawing.Color.DimGray;
@@ -132,7 +152,7 @@
             this.airTabPage1.SelectedTabBackColor = System.Drawing.Color.White;
             this.airTabPage1.SelectedTextColor = System.Drawing.Color.Black;
             this.airTabPage1.ShowOuterBorders = false;
-            this.airTabPage1.Size = new System.Drawing.Size(800, 468);
+            this.airTabPage1.Size = new System.Drawing.Size(800, 443);
             this.airTabPage1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.airTabPage1.SquareColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(87)))), ((int)(((byte)(100)))));
             this.airTabPage1.TabCursor = System.Windows.Forms.Cursors.Hand;
@@ -152,7 +172,7 @@
             this.tabPage1.Location = new System.Drawing.Point(119, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(677, 460);
+            this.tabPage1.Size = new System.Drawing.Size(677, 435);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             // 
@@ -260,6 +280,8 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.ButtonCalibration);
+            this.tabPage2.Controls.Add(this.ButtonGetId);
             this.tabPage2.Controls.Add(this.ButtonGetRawData);
             this.tabPage2.Controls.Add(this.materialLabel6);
             this.tabPage2.Controls.Add(this.LabelID);
@@ -276,9 +298,49 @@
             this.tabPage2.Location = new System.Drawing.Point(119, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(677, 460);
+            this.tabPage2.Size = new System.Drawing.Size(677, 435);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
+            // 
+            // ButtonCalibration
+            // 
+            this.ButtonCalibration.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.ButtonCalibration.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            this.ButtonCalibration.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonCalibration.DangerColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.ButtonCalibration.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ButtonCalibration.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ButtonCalibration.HoverTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.ButtonCalibration.InfoColor = System.Drawing.Color.FromArgb(((int)(((byte)(144)))), ((int)(((byte)(147)))), ((int)(((byte)(153)))));
+            this.ButtonCalibration.Location = new System.Drawing.Point(549, 278);
+            this.ButtonCalibration.Name = "ButtonCalibration";
+            this.ButtonCalibration.PrimaryColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(158)))), ((int)(((byte)(255)))));
+            this.ButtonCalibration.Size = new System.Drawing.Size(104, 51);
+            this.ButtonCalibration.SuccessColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(194)))), ((int)(((byte)(58)))));
+            this.ButtonCalibration.TabIndex = 13;
+            this.ButtonCalibration.Text = "计算系数";
+            this.ButtonCalibration.TextColor = System.Drawing.Color.White;
+            this.ButtonCalibration.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
+            // 
+            // ButtonGetId
+            // 
+            this.ButtonGetId.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.ButtonGetId.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            this.ButtonGetId.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonGetId.DangerColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.ButtonGetId.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ButtonGetId.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ButtonGetId.HoverTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.ButtonGetId.InfoColor = System.Drawing.Color.FromArgb(((int)(((byte)(144)))), ((int)(((byte)(147)))), ((int)(((byte)(153)))));
+            this.ButtonGetId.Location = new System.Drawing.Point(448, 51);
+            this.ButtonGetId.Name = "ButtonGetId";
+            this.ButtonGetId.PrimaryColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(158)))), ((int)(((byte)(255)))));
+            this.ButtonGetId.Size = new System.Drawing.Size(95, 22);
+            this.ButtonGetId.SuccessColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(194)))), ((int)(((byte)(58)))));
+            this.ButtonGetId.TabIndex = 12;
+            this.ButtonGetId.Text = "获取ID";
+            this.ButtonGetId.TextColor = System.Drawing.Color.White;
+            this.ButtonGetId.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
             // 
             // ButtonGetRawData
             // 
@@ -485,7 +547,6 @@
             this.TextBoxTT1.ReadOnly = false;
             this.TextBoxTT1.Size = new System.Drawing.Size(78, 23);
             this.TextBoxTT1.TabIndex = 17;
-            this.TextBoxTT1.Text = "aloneTextBox1";
             this.TextBoxTT1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.TextBoxTT1.UseSystemPasswordChar = false;
             // 
@@ -512,7 +573,6 @@
             this.textBoxT0P2.ReadOnly = false;
             this.textBoxT0P2.Size = new System.Drawing.Size(78, 23);
             this.textBoxT0P2.TabIndex = 9;
-            this.textBoxT0P2.Text = "aloneTextBox1";
             this.textBoxT0P2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0P2.UseSystemPasswordChar = false;
             // 
@@ -609,7 +669,6 @@
             this.textBoxT0P1.ReadOnly = false;
             this.textBoxT0P1.Size = new System.Drawing.Size(78, 23);
             this.textBoxT0P1.TabIndex = 6;
-            this.textBoxT0P1.Text = "aloneTextBox1";
             this.textBoxT0P1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0P1.UseSystemPasswordChar = false;
             // 
@@ -626,7 +685,6 @@
             this.textBoxT1P1.ReadOnly = false;
             this.textBoxT1P1.Size = new System.Drawing.Size(78, 23);
             this.textBoxT1P1.TabIndex = 10;
-            this.textBoxT1P1.Text = "aloneTextBox1";
             this.textBoxT1P1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT1P1.UseSystemPasswordChar = false;
             // 
@@ -643,7 +701,6 @@
             this.textBoxT1P2.ReadOnly = false;
             this.textBoxT1P2.Size = new System.Drawing.Size(78, 23);
             this.textBoxT1P2.TabIndex = 11;
-            this.textBoxT1P2.Text = "aloneTextBox1";
             this.textBoxT1P2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT1P2.UseSystemPasswordChar = false;
             // 
@@ -660,7 +717,6 @@
             this.textBoxT2P1.ReadOnly = false;
             this.textBoxT2P1.Size = new System.Drawing.Size(78, 23);
             this.textBoxT2P1.TabIndex = 12;
-            this.textBoxT2P1.Text = "aloneTextBox1";
             this.textBoxT2P1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT2P1.UseSystemPasswordChar = false;
             // 
@@ -677,7 +733,6 @@
             this.textBoxT2P2.ReadOnly = false;
             this.textBoxT2P2.Size = new System.Drawing.Size(78, 23);
             this.textBoxT2P2.TabIndex = 13;
-            this.textBoxT2P2.Text = "aloneTextBox1";
             this.textBoxT2P2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT2P2.UseSystemPasswordChar = false;
             // 
@@ -694,7 +749,6 @@
             this.textBoxT3P1.ReadOnly = false;
             this.textBoxT3P1.Size = new System.Drawing.Size(78, 23);
             this.textBoxT3P1.TabIndex = 14;
-            this.textBoxT3P1.Text = "aloneTextBox1";
             this.textBoxT3P1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT3P1.UseSystemPasswordChar = false;
             // 
@@ -711,7 +765,6 @@
             this.textBoxT3P2.ReadOnly = false;
             this.textBoxT3P2.Size = new System.Drawing.Size(78, 23);
             this.textBoxT3P2.TabIndex = 15;
-            this.textBoxT3P2.Text = "aloneTextBox1";
             this.textBoxT3P2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT3P2.UseSystemPasswordChar = false;
             // 
@@ -748,7 +801,6 @@
             this.textBoxT1.ReadOnly = false;
             this.textBoxT1.Size = new System.Drawing.Size(78, 23);
             this.textBoxT1.TabIndex = 16;
-            this.textBoxT1.Text = "aloneTextBox1";
             this.textBoxT1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT1.UseSystemPasswordChar = false;
             // 
@@ -765,7 +817,6 @@
             this.textBoxT0.ReadOnly = false;
             this.textBoxT0.Size = new System.Drawing.Size(78, 23);
             this.textBoxT0.TabIndex = 17;
-            this.textBoxT0.Text = "aloneTextBox1";
             this.textBoxT0.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0.UseSystemPasswordChar = false;
             // 
@@ -782,7 +833,6 @@
             this.textBoxT2.ReadOnly = false;
             this.textBoxT2.Size = new System.Drawing.Size(78, 23);
             this.textBoxT2.TabIndex = 18;
-            this.textBoxT2.Text = "aloneTextBox1";
             this.textBoxT2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT2.UseSystemPasswordChar = false;
             // 
@@ -799,7 +849,6 @@
             this.textBoxT3.ReadOnly = false;
             this.textBoxT3.Size = new System.Drawing.Size(78, 23);
             this.textBoxT3.TabIndex = 19;
-            this.textBoxT3.Text = "aloneTextBox1";
             this.textBoxT3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT3.UseSystemPasswordChar = false;
             // 
@@ -816,7 +865,6 @@
             this.textBoxO1.ReadOnly = false;
             this.textBoxO1.Size = new System.Drawing.Size(78, 23);
             this.textBoxO1.TabIndex = 20;
-            this.textBoxO1.Text = "aloneTextBox1";
             this.textBoxO1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxO1.UseSystemPasswordChar = false;
             // 
@@ -833,7 +881,6 @@
             this.textBoxO3.ReadOnly = false;
             this.textBoxO3.Size = new System.Drawing.Size(78, 23);
             this.textBoxO3.TabIndex = 21;
-            this.textBoxO3.Text = "aloneTextBox1";
             this.textBoxO3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxO3.UseSystemPasswordChar = false;
             // 
@@ -850,7 +897,6 @@
             this.textBoxO2.ReadOnly = false;
             this.textBoxO2.Size = new System.Drawing.Size(78, 23);
             this.textBoxO2.TabIndex = 22;
-            this.textBoxO2.Text = "aloneTextBox1";
             this.textBoxO2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxO2.UseSystemPasswordChar = false;
             // 
@@ -867,7 +913,6 @@
             this.textBoxO4.ReadOnly = false;
             this.textBoxO4.Size = new System.Drawing.Size(78, 23);
             this.textBoxO4.TabIndex = 23;
-            this.textBoxO4.Text = "aloneTextBox1";
             this.textBoxO4.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxO4.UseSystemPasswordChar = false;
             // 
@@ -884,7 +929,6 @@
             this.textBoxT0P4.ReadOnly = false;
             this.textBoxT0P4.Size = new System.Drawing.Size(78, 23);
             this.textBoxT0P4.TabIndex = 27;
-            this.textBoxT0P4.Text = "aloneTextBox1";
             this.textBoxT0P4.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0P4.UseSystemPasswordChar = false;
             // 
@@ -901,7 +945,6 @@
             this.textBoxT0P3.ReadOnly = false;
             this.textBoxT0P3.Size = new System.Drawing.Size(78, 23);
             this.textBoxT0P3.TabIndex = 28;
-            this.textBoxT0P3.Text = "aloneTextBox1";
             this.textBoxT0P3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxT0P3.UseSystemPasswordChar = false;
             // 
@@ -918,7 +961,6 @@
             this.TextBoxTT0.ReadOnly = false;
             this.TextBoxTT0.Size = new System.Drawing.Size(78, 23);
             this.TextBoxTT0.TabIndex = 30;
-            this.TextBoxTT0.Text = "aloneTextBox2";
             this.TextBoxTT0.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.TextBoxTT0.UseSystemPasswordChar = false;
             // 
@@ -935,7 +977,6 @@
             this.TextBoxTT2.ReadOnly = false;
             this.TextBoxTT2.Size = new System.Drawing.Size(78, 23);
             this.TextBoxTT2.TabIndex = 31;
-            this.TextBoxTT2.Text = "aloneTextBox3";
             this.TextBoxTT2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.TextBoxTT2.UseSystemPasswordChar = false;
             // 
@@ -952,13 +993,17 @@
             this.TextBoxTT3.ReadOnly = false;
             this.TextBoxTT3.Size = new System.Drawing.Size(78, 23);
             this.TextBoxTT3.TabIndex = 32;
-            this.TextBoxTT3.Text = "aloneTextBox4";
             this.TextBoxTT3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.TextBoxTT3.UseSystemPasswordChar = false;
             // 
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.White;
+            this.tabPage3.Controls.Add(this.labelRegUpdateMsg);
+            this.tabPage3.Controls.Add(this.ButtonGetRegData);
+            this.tabPage3.Controls.Add(this.ButtonGetNvmData);
+            this.tabPage3.Controls.Add(this.materialLabel5);
+            this.tabPage3.Controls.Add(this.ComBoxRegDisplayModel);
             this.tabPage3.Controls.Add(this.LabelCurrentPage);
             this.tabPage3.Controls.Add(this.ButtonPageSub);
             this.tabPage3.Controls.Add(this.ButtonPageAdd);
@@ -967,14 +1012,77 @@
             this.tabPage3.Location = new System.Drawing.Point(119, 4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(677, 460);
+            this.tabPage3.Size = new System.Drawing.Size(677, 435);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
+            // 
+            // labelRegUpdateMsg
+            // 
+            this.labelRegUpdateMsg.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelRegUpdateMsg.ForeColor = System.Drawing.Color.Black;
+            this.labelRegUpdateMsg.Location = new System.Drawing.Point(189, 34);
+            this.labelRegUpdateMsg.Name = "labelRegUpdateMsg";
+            this.labelRegUpdateMsg.Size = new System.Drawing.Size(130, 48);
+            this.labelRegUpdateMsg.TabIndex = 10;
+            this.labelRegUpdateMsg.Text = "RegUpdate@10:00:01";
+            this.labelRegUpdateMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ButtonGetRegData
+            // 
+            this.ButtonGetRegData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonGetRegData.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonGetRegData.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonGetRegData.Image = null;
+            this.ButtonGetRegData.Location = new System.Drawing.Point(256, 359);
+            this.ButtonGetRegData.Name = "ButtonGetRegData";
+            this.ButtonGetRegData.NoRounding = false;
+            this.ButtonGetRegData.Size = new System.Drawing.Size(140, 24);
+            this.ButtonGetRegData.TabIndex = 9;
+            this.ButtonGetRegData.Text = "获取Reg数据";
+            this.ButtonGetRegData.Transparent = false;
+            // 
+            // ButtonGetNvmData
+            // 
+            this.ButtonGetNvmData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonGetNvmData.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonGetNvmData.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonGetNvmData.Image = null;
+            this.ButtonGetNvmData.Location = new System.Drawing.Point(40, 359);
+            this.ButtonGetNvmData.Name = "ButtonGetNvmData";
+            this.ButtonGetNvmData.NoRounding = false;
+            this.ButtonGetNvmData.Size = new System.Drawing.Size(140, 24);
+            this.ButtonGetNvmData.TabIndex = 8;
+            this.ButtonGetNvmData.Text = "获取Nvm数据";
+            this.ButtonGetNvmData.Transparent = false;
+            // 
+            // materialLabel5
+            // 
+            this.materialLabel5.Depth = 0;
+            this.materialLabel5.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel5.Location = new System.Drawing.Point(39, 34);
+            this.materialLabel5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            this.materialLabel5.Name = "materialLabel5";
+            this.materialLabel5.Size = new System.Drawing.Size(119, 22);
+            this.materialLabel5.TabIndex = 7;
+            this.materialLabel5.Text = "选择类型";
+            // 
+            // ComBoxRegDisplayModel
+            // 
+            this.ComBoxRegDisplayModel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ComBoxRegDisplayModel.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.ComBoxRegDisplayModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComBoxRegDisplayModel.EnabledCalc = true;
+            this.ComBoxRegDisplayModel.FormattingEnabled = true;
+            this.ComBoxRegDisplayModel.ItemHeight = 20;
+            this.ComBoxRegDisplayModel.Location = new System.Drawing.Point(40, 56);
+            this.ComBoxRegDisplayModel.Name = "ComBoxRegDisplayModel";
+            this.ComBoxRegDisplayModel.Size = new System.Drawing.Size(119, 26);
+            this.ComBoxRegDisplayModel.TabIndex = 6;
             // 
             // LabelCurrentPage
             // 
             this.LabelCurrentPage.ForeColor = System.Drawing.Color.Black;
-            this.LabelCurrentPage.Location = new System.Drawing.Point(382, 70);
+            this.LabelCurrentPage.Location = new System.Drawing.Point(412, 70);
             this.LabelCurrentPage.Name = "LabelCurrentPage";
             this.LabelCurrentPage.Size = new System.Drawing.Size(33, 25);
             this.LabelCurrentPage.TabIndex = 3;
@@ -987,7 +1095,7 @@
             this.ButtonPageSub.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
             this.ButtonPageSub.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ButtonPageSub.Image = null;
-            this.ButtonPageSub.Location = new System.Drawing.Point(319, 71);
+            this.ButtonPageSub.Location = new System.Drawing.Point(349, 71);
             this.ButtonPageSub.Name = "ButtonPageSub";
             this.ButtonPageSub.NoRounding = false;
             this.ButtonPageSub.Size = new System.Drawing.Size(57, 24);
@@ -1001,7 +1109,7 @@
             this.ButtonPageAdd.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
             this.ButtonPageAdd.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.ButtonPageAdd.Image = null;
-            this.ButtonPageAdd.Location = new System.Drawing.Point(421, 71);
+            this.ButtonPageAdd.Location = new System.Drawing.Point(451, 71);
             this.ButtonPageAdd.Name = "ButtonPageAdd";
             this.ButtonPageAdd.NoRounding = false;
             this.ButtonPageAdd.Size = new System.Drawing.Size(57, 24);
@@ -1051,7 +1159,7 @@
             this.poisonDataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.poisonDataGridView1.RowTemplate.Height = 23;
             this.poisonDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.poisonDataGridView1.Size = new System.Drawing.Size(578, 287);
+            this.poisonDataGridView1.Size = new System.Drawing.Size(578, 230);
             this.poisonDataGridView1.TabIndex = 0;
             // 
             // Column1
@@ -1102,6 +1210,103 @@
             this.Column8.Name = "Column8";
             this.Column8.Width = 50;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.BackColor = System.Drawing.Color.White;
+            this.tabPage4.Controls.Add(this.ListBoxAllOutValue);
+            this.tabPage4.Controls.Add(this.ButtonGetAllOutData);
+            this.tabPage4.Controls.Add(this.ButtonGetOutData);
+            this.tabPage4.Controls.Add(this.textOutValue);
+            this.tabPage4.Controls.Add(this.materialLabel7);
+            this.tabPage4.Controls.Add(this.ComboxOutName);
+            this.tabPage4.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabPage4.Location = new System.Drawing.Point(119, 4);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(677, 435);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "tabPage4";
+            // 
+            // ListBoxAllOutValue
+            // 
+            this.ListBoxAllOutValue.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.ListBoxAllOutValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.ListBoxAllOutValue.FormattingEnabled = true;
+            this.ListBoxAllOutValue.IntegralHeight = false;
+            this.ListBoxAllOutValue.ItemHeight = 18;
+            this.ListBoxAllOutValue.Location = new System.Drawing.Point(219, 51);
+            this.ListBoxAllOutValue.Name = "ListBoxAllOutValue";
+            this.ListBoxAllOutValue.Size = new System.Drawing.Size(250, 266);
+            this.ListBoxAllOutValue.TabIndex = 15;
+            // 
+            // ButtonGetAllOutData
+            // 
+            this.ButtonGetAllOutData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonGetAllOutData.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonGetAllOutData.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonGetAllOutData.Image = null;
+            this.ButtonGetAllOutData.Location = new System.Drawing.Point(475, 51);
+            this.ButtonGetAllOutData.Name = "ButtonGetAllOutData";
+            this.ButtonGetAllOutData.NoRounding = false;
+            this.ButtonGetAllOutData.Size = new System.Drawing.Size(136, 24);
+            this.ButtonGetAllOutData.TabIndex = 14;
+            this.ButtonGetAllOutData.Text = "获取所有输出数据";
+            this.ButtonGetAllOutData.Transparent = false;
+            // 
+            // ButtonGetOutData
+            // 
+            this.ButtonGetOutData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonGetOutData.Customization = "7e3t//Ly8v/r6+v/5ubm/+vr6//f39//p6en/zw8PP8UFBT/gICA/w==";
+            this.ButtonGetOutData.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.ButtonGetOutData.Image = null;
+            this.ButtonGetOutData.Location = new System.Drawing.Point(32, 143);
+            this.ButtonGetOutData.Name = "ButtonGetOutData";
+            this.ButtonGetOutData.NoRounding = false;
+            this.ButtonGetOutData.Size = new System.Drawing.Size(118, 24);
+            this.ButtonGetOutData.TabIndex = 12;
+            this.ButtonGetOutData.Text = "获取输出数据";
+            this.ButtonGetOutData.Transparent = false;
+            // 
+            // textOutValue
+            // 
+            this.textOutValue.BackColor = System.Drawing.Color.Transparent;
+            this.textOutValue.EnabledCalc = true;
+            this.textOutValue.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.textOutValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(124)))), ((int)(((byte)(133)))), ((int)(((byte)(142)))));
+            this.textOutValue.Location = new System.Drawing.Point(32, 90);
+            this.textOutValue.MaxLength = 32767;
+            this.textOutValue.MultiLine = false;
+            this.textOutValue.Name = "textOutValue";
+            this.textOutValue.ReadOnly = false;
+            this.textOutValue.Size = new System.Drawing.Size(119, 31);
+            this.textOutValue.TabIndex = 11;
+            this.textOutValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textOutValue.UseSystemPasswordChar = false;
+            // 
+            // materialLabel7
+            // 
+            this.materialLabel7.Depth = 0;
+            this.materialLabel7.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel7.Location = new System.Drawing.Point(31, 27);
+            this.materialLabel7.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            this.materialLabel7.Name = "materialLabel7";
+            this.materialLabel7.Size = new System.Drawing.Size(119, 22);
+            this.materialLabel7.TabIndex = 9;
+            this.materialLabel7.Text = "选择类型";
+            // 
+            // ComboxOutName
+            // 
+            this.ComboxOutName.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ComboxOutName.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.ComboxOutName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboxOutName.EnabledCalc = true;
+            this.ComboxOutName.FormattingEnabled = true;
+            this.ComboxOutName.ItemHeight = 20;
+            this.ComboxOutName.Location = new System.Drawing.Point(32, 49);
+            this.ComboxOutName.Name = "ComboxOutName";
+            this.ComboxOutName.Size = new System.Drawing.Size(119, 26);
+            this.ComboxOutName.TabIndex = 8;
+            // 
             // miniToolStrip
             // 
             this.miniToolStrip.AutoSize = false;
@@ -1134,12 +1339,34 @@
             this.timer1.SynchronizingObject = this;
             this.timer1.Elapsed += new System.Timers.ElapsedEventHandler(this.timer1_Elapsed);
             // 
+            // crownMenuStrip1
+            // 
+            this.crownMenuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.crownMenuStrip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.crownMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.MenuItemDataView });
+            this.crownMenuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.crownMenuStrip1.Name = "crownMenuStrip1";
+            this.crownMenuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
+            this.crownMenuStrip1.Size = new System.Drawing.Size(800, 25);
+            this.crownMenuStrip1.TabIndex = 2;
+            this.crownMenuStrip1.Text = "crownMenuStrip1";
+            // 
+            // MenuItemDataView
+            // 
+            this.MenuItemDataView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.MenuItemDataView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.MenuItemDataView.Name = "MenuItemDataView";
+            this.MenuItemDataView.Size = new System.Drawing.Size(68, 21);
+            this.MenuItemDataView.Text = "查看数据";
+            this.MenuItemDataView.Click += new System.EventHandler(this.MenuItemDataView_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 468);
             this.Controls.Add(this.miniToolStrip);
+            this.Controls.Add(this.crownMenuStrip1);
             this.Controls.Add(this.airTabPage1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -1151,11 +1378,43 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.poisonDataGridView1)).EndInit();
+            this.tabPage4.ResumeLayout(false);
             this.miniToolStrip.ResumeLayout(false);
             this.miniToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).EndInit();
+            this.crownMenuStrip1.ResumeLayout(false);
+            this.crownMenuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
+
+        private ReaLTaiizor.Controls.HopeButton ButtonCalibration;
+
+        private ReaLTaiizor.Controls.HopeButton ButtonGetId;
+
+        private System.Windows.Forms.ToolStripMenuItem MenuItemDataView;
+
+        private ReaLTaiizor.Controls.CrownMenuStrip crownMenuStrip1;
+
+        private ReaLTaiizor.Controls.DungeonListBox ListBoxAllOutValue;
+
+        
+        private ReaLTaiizor.Controls.AirButton ButtonGetAllOutData;
+
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel7;
+        private ReaLTaiizor.Controls.AloneComboBox ComboxOutName;
+        private ReaLTaiizor.Controls.AloneTextBox textOutValue;
+        private ReaLTaiizor.Controls.AirButton ButtonGetOutData;
+
+        private System.Windows.Forms.TabPage tabPage4;
+
+        private ReaLTaiizor.Controls.CrownLabel labelRegUpdateMsg;
+
+        private ReaLTaiizor.Controls.AirButton ButtonGetNvmData;
+        private ReaLTaiizor.Controls.AirButton ButtonGetRegData;
+
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel5;
+        private ReaLTaiizor.Controls.AloneComboBox ComBoxRegDisplayModel;
 
         private ReaLTaiizor.Controls.CrownLabel LabelCurrentPage;
 
